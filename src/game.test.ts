@@ -1,5 +1,12 @@
 ﻿import {Game, Name} from "./game";
-import assert from "assert";
+
+describe('Game gives right clues for specific boy ', () => {
+    const game = new Game("123");
+    game.setBoy(Name.Adam)
+    it('has a defined boy', () => {
+        expect(game.chosenBoy).toBeDefined()
+    });
+});
 
 describe('Game has Clues ', () =>
 {

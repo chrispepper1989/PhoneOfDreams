@@ -1,4 +1,5 @@
-﻿import Rand, {PRNG} from 'rand-seed';
+﻿import Rand from 'rand-seed';
+
 enum BoardLocation {
     Cinema,
     HighSchool,
@@ -262,6 +263,9 @@ export const boys: { [id in Name] : TBoy; } = {
 const numberOfBoys = Object.keys(boys).length;
 
 export class Game {
+    setBoy(value: Name) {
+        this._chosenBoy = boys[value];
+    }
 
     get chosenBoy(): TBoy {
         return this._chosenBoy;
@@ -277,6 +281,7 @@ export class Game {
         this.rand = new Rand(seed);
         const chosenBoyIndex = this.RandInt(numberOfBoys) as Name;
         this._chosenBoy = boys[chosenBoyIndex];
+        this.setBoy(chosenBoyIndex);
     }
 
     getEnumClue(theEnum: any, boyValue:any|undefined):string
