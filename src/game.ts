@@ -81,7 +81,7 @@ type TBoy = {
     wears?:Clothes
 };
 
-function BoyNameToEnum(name:string):Name
+export function BoyNameToEnum(name:string):Name
 {  
     const typedName = name as keyof typeof Name;
     return Name[typedName];
@@ -298,11 +298,11 @@ export class Game {
     }
     getFoodClue():string
     {
-        return `He doesnt eat ${this.getEnumClue(Sport,  this._chosenBoy.food)}`;
+        return `He doesnt eat ${this.getEnumClue(Food,  this._chosenBoy.food)}`;
     }
     getClothesClue():string
     {
-        return `He doesnt wear ${this.getEnumClue(Sport,  this._chosenBoy.wears)}`;
+        return `He doesnt wear ${this.getEnumClue(Clothes,  this._chosenBoy.wears)}`;
     }
     
     getClue(boyCalled:Name):string{ 

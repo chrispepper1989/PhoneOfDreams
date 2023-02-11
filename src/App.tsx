@@ -1,7 +1,7 @@
 import React, {ReactElement, useEffect, useState} from 'react';
 import logo from './logo.svg';
 import './App.css';
-import {EnumToNumberArray, EnumToStringArray, Game, Name} from "./game";
+import {BoyNameToEnum, EnumToNumberArray, EnumToStringArray, Game, Name} from "./game";
 
 
 const Clues = (clues: string[] | undefined) => {
@@ -22,15 +22,16 @@ function App() {
     const [nameSelected, setNameSelected] = useState<Name>(Name.John);
 
     const handleChange = (e: any) => {
-        setNameSelected(e.target.value);
+        const nameCalled:Name = BoyNameToEnum(e.target.value);
+        setNameSelected(nameCalled);
     };
     
     function newClue(nameCalled: Name ) {
-        let test = new Game("123")
+        
         console.log("Clue From:")
         console.log(nameCalled);
-        
-        const clue= test.getClue(nameCalled);
+        console.log(nameCalled as Name);
+        const clue= game.getClue(nameCalled);
         console.log(clue);
         let currentClues = clues ?? [];
         currentClues?.push(clue);
@@ -40,7 +41,7 @@ function App() {
   
     
     const MakeItem = function (name: string, value: Name) {
-        return <option key={value} value={value}>{name}</option>;
+        return <option key={value} value={name}>{name}</option>;
     };
 
     return (
