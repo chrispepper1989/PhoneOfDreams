@@ -268,17 +268,23 @@ export class Game {
     }
     private _chosenBoy: TBoy;
     private rand: Rand;
+    private RandInt(max:number):number
+    {
+        return Math.floor(this.rand.next() * max);
+    }
     constructor(seed:string)
     {
         this.rand = new Rand(seed);
-        const chosenBoyIndex = (this.rand.next() * numberOfBoys-1) as Name;
+        const chosenBoyIndex = this.RandInt(numberOfBoys) as Name;
         this._chosenBoy = boys[chosenBoyIndex];
     }
 
-    getEnumClue(theEnum: any, boyValue:any):string
+    getEnumClue(theEnum: any, boyValue:any|undefined):string
     {
-        const enumValues = EnumToStringArrayWithout(theEnum,  boyValue);
-        const enumValueIndex = this.rand.next() * enumValues.length;
+        
+        let enumValues:any = [];
+        enumValues = boyValue ? EnumToStringArray(theEnum) : EnumToStringArrayWithout(theEnum,  boyValue);
+        const enumValueIndex = this.RandInt(enumValues.length);
         const enumValueAsString = enumValues[enumValueIndex];
         return enumValueAsString;
     }
