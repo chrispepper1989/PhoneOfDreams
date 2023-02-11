@@ -80,6 +80,14 @@ type TBoy = {
     wears?:Clothes
 };
 
+function EnumToArrayWithout(anEnum:any, element:any) {
+
+    return Object.keys(anEnum)
+        .filter(value => !isNaN(Number(value)))
+        .filter( value => value != element)
+        .map(key => anEnum[key]);
+}
+
 export const boys: { [id in Name] : TBoy; } = {
     [Name.John]: {
         location: BoardLocation.GamerLounge,
@@ -256,12 +264,14 @@ export class Game {
         const chosenBoyIndex = (this.rand.next() * numberOfBoys) as Name;
         this._chosenBoy = boys[chosenBoyIndex];
     }
+
+  
     getLocationClue():string
-    {
-        this.rand.next() * numberOfBoys
-        this.chosenBoy.location;
-        
-        return undefined;
+    {           
+        const locations = EnumToArrayWithout(BoardLocation,  this._chosenBoy.location);        
+        const locationIndex = this.rand.next() * locations.length;
+        const locationAsString = locations[locationIndex];        
+        return `He doesnt hang out at ${locationAsString}`;
     }
     getSportClue():string
     {
