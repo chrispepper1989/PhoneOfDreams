@@ -246,19 +246,19 @@ export class Game {
         const chosenBoyIndex = (Math.random() * numberOfBoys) as Name;
         this._chosenBoy = boys[chosenBoyIndex];
     }
-    getLocationClue():Location | undefined
+    getLocationClue():string
     {
         return undefined;
     }
-    getSportClue():Sport | undefined
+    getSportClue():string
     {
         return undefined;
     }
-    getFoodClue():Food | undefined
+    getFoodClue():string
     {
         return undefined;
     }
-    getClothesClue():Clothes | undefined
+    getClothesClue():string
     {
         return undefined;
     }
@@ -270,9 +270,42 @@ export class Game {
         Paul through Jason will give out clues about food. 
         Will through James will give out clues about clothing.
          */
-        let clue = "";
         
-        return clue;
+        
+        switch (boyCalled)
+        {
+            case Name.John:                
+            case Name.Luke:
+            case Name.Michael:
+            case Name.Harry:
+            case Name.Ben:
+            case Name.Nick:
+                return this.getLocationClue();
+            case Name.Adam:
+            case Name.Josh:
+            case Name.Patrick:
+            case Name.Peter:
+            case Name.Anthony:
+            case Name.Tyler:
+                return this.getSportClue();
+            case Name.Paul:
+            case Name.Mark:
+            case Name.David:
+            case Name.Jack:
+            case Name.Tom:
+            case Name.Jason:
+                return this.getFoodClue();
+            case Name.Will:
+            case Name.Chris:
+            case Name.Brandon:
+            case Name.Matt:
+            case Name.Alex:
+            case Name.James:
+                return  this.getClothesClue();
+
+        }
+        
+        return  "Sorry not saying anything";
     }
     
    
