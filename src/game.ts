@@ -1,4 +1,5 @@
-﻿enum BoardLocation {
+﻿import Rand, {PRNG} from 'rand-seed';
+enum BoardLocation {
     Cinema,
     HighSchool,
     TownPark,
@@ -33,7 +34,7 @@ enum Clothes
     Hat=16,
     Orange=32
 }
-enum Name
+export enum Name
 {
     //Gamer
     John,
@@ -80,13 +81,31 @@ type TBoy = {
     wears?:Clothes
 };
 
-function EnumToArrayWithout(anEnum:any, element:any) {
+function BoyNameToEnum(name:string):Name
+{  
+    const typedName = name as keyof typeof Name;
+    return Name[typedName];
+}
+function EnumToStringArrayWithout(anEnum:any, element:any) {
 
     return Object.keys(anEnum)
         .filter(value => !isNaN(Number(value)))
         .filter( value => value != element)
         .map(key => anEnum[key]);
 }
+export function EnumToStringArray(anEnum:any) {
+
+    return Object.keys(anEnum)
+        .filter(value => !isNaN(Number(value)))
+        .map(key => anEnum[key]);
+}
+export function EnumToNumberArray(anEnum:any):number[] {
+
+    return Object.values(anEnum)
+        .filter(value => !isNaN(Number(value))) as number[];
+
+}
+
 
 export const boys: { [id in Name] : TBoy; } = {
     [Name.John]: {
@@ -250,7 +269,7 @@ const numberOfSports = Object.keys(Sport).filter(isNaN).length;
 // @ts-ignore
 const numberOfFoods = Object.keys(Food).filter(isNaN).length;
 
-import Rand, {PRNG} from 'rand-seed';
+
 export class Game {
 
     get chosenBoy(): TBoy {
@@ -265,25 +284,28 @@ export class Game {
         this._chosenBoy = boys[chosenBoyIndex];
     }
 
-  
+    getEnumClue(theEnum: any, boyValue:any):string
+    {
+        const enumValues = EnumToStringArrayWithout(theEnum,  boyValue);
+        const enumValueIndex = this.rand.next() * enumValues.length;
+        const enumValueAsString = enumValues[enumValueIndex];
+        return enumValueAsString;
+    }
     getLocationClue():string
-    {           
-        const locations = EnumToArrayWithout(BoardLocation,  this._chosenBoy.location);        
-        const locationIndex = this.rand.next() * locations.length;
-        const locationAsString = locations[locationIndex];        
-        return `He doesnt hang out at ${locationAsString}`;
+    {
+        return `He doesnt hang out at ${this.getEnumClue(BoardLocation,  this._chosenBoy.location)}`;
     }
     getSportClue():string
     {
-        return undefined;
+        return `He doesnt play ${this.getEnumClue(Sport,  this._chosenBoy.sport)}`;
     }
     getFoodClue():string
     {
-        return undefined;
+        return `He doesnt eat ${this.getEnumClue(Sport,  this._chosenBoy.food)}`;
     }
     getClothesClue():string
     {
-        return undefined;
+        return `He doesnt wear ${this.getEnumClue(Sport,  this._chosenBoy.wears)}`;
     }
     
     getClue(boyCalled:Name):string{ 
@@ -329,7 +351,6 @@ export class Game {
         }
         
         return  "Sorry not saying anything";
-    }
-    
+    }   
    
 }
