@@ -25,8 +25,12 @@ function App() {
         setNameSelected(e.target.value);
     };
     
-    function newClue(nameCalled: Name ) {       
-        const clue= game.getClue(nameCalled);
+    function newClue(nameCalled: Name ) {
+        let test = new Game("123")
+        console.log("Clue From:")
+        console.log(nameCalled);
+        
+        const clue= test.getClue(nameCalled);
         console.log(clue);
         let currentClues = clues ?? [];
         currentClues?.push(clue);
