@@ -231,3 +231,49 @@ export const boys: { [id in Name] : TBoy; } = {
         wears: Clothes.Sneakers
     }
 };
+
+const numberOfBoys = Object.keys(boys).length;
+
+export class Game {
+
+    get chosenBoy(): TBoy {
+        return this._chosenBoy;
+    }
+    private _chosenBoy: TBoy;
+    
+    constructor()
+    {
+        const chosenBoyIndex = (Math.random() * numberOfBoys) as Name;
+        this._chosenBoy = boys[chosenBoyIndex];
+    }
+    getLocationClue():Location | undefined
+    {
+        return undefined;
+    }
+    getSportClue():Sport | undefined
+    {
+        return undefined;
+    }
+    getFoodClue():Food | undefined
+    {
+        return undefined;
+    }
+    getClothesClue():Clothes | undefined
+    {
+        return undefined;
+    }
+    
+    getClue(boyCalled:Name):string{ 
+        /*
+        The boys from John to Nick will give a clue about the hang out location. 
+        Adam through Tyler will give clues about sports.
+        Paul through Jason will give out clues about food. 
+        Will through James will give out clues about clothing.
+         */
+        let clue = "";
+        
+        return clue;
+    }
+    
+   
+}
