@@ -285,8 +285,7 @@ export class Game {
     }
 
     getEnumClue(theEnum: any, boyValue:any|undefined):string
-    {
-        
+    {        
         let enumValues:any = [];
         enumValues = boyValue ? EnumToStringArray(theEnum) : EnumToStringArrayWithout(theEnum,  boyValue);
         const enumValueIndex = this.RandInt(enumValues.length);

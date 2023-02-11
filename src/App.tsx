@@ -1,7 +1,8 @@
-import React, {ReactElement, useEffect, useState} from 'react';
-import logo from './logo.svg';
+import React, {useState} from 'react';
 import './App.css';
-import {BoyNameToEnum, EnumToNumberArray, EnumToStringArray, Game, Name} from "./game";
+import {BoyNameToEnum, EnumToNumberArray, Game, Name} from "./game";
+import {Phone} from "./Phone";
+
 
 
 const Clues = (clues: string[] | undefined) => {
@@ -44,16 +45,21 @@ function App() {
         return <option key={value} value={name}>{name}</option>;
     };
 
+    function handlePhoneCall(number:string) {
+        console.log("Phone: " + number);
+    }
+
     return (
         <div className="App">
           
             <center><h1>DreamPhone</h1></center>
             {Clues(clues)}
-
+            <Phone onCall={handlePhoneCall}></Phone>
+            <h2>Speed Dial</h2>
             <select id="dropdown" value={nameSelected} onChange={handleChange}>
                 {names.map((x: Name) => MakeItem(Name[x], x))}
             </select>
-            <button onClick={() => newClue(nameSelected)}> New Clue</button>
+            <button onClick={() => newClue(nameSelected)}> Speed Dial</button>
           
         </div>
 
