@@ -260,15 +260,6 @@ export const boys: { [id in Name] : TBoy; } = {
 };
 
 const numberOfBoys = Object.keys(boys).length;
-// @ts-ignore
-const numberOfLocations = Object.keys(BoardLocation).filter(isNaN).length;
-// @ts-ignore
-const numberOfClothes = Object.keys(Clothes).filter(isNaN).length;
-// @ts-ignore
-const numberOfSports = Object.keys(Sport).filter(isNaN).length;
-// @ts-ignore
-const numberOfFoods = Object.keys(Food).filter(isNaN).length;
-
 
 export class Game {
 
@@ -280,7 +271,7 @@ export class Game {
     constructor(seed:string)
     {
         this.rand = new Rand(seed);
-        const chosenBoyIndex = (this.rand.next() * numberOfBoys) as Name;
+        const chosenBoyIndex = (this.rand.next() * numberOfBoys-1) as Name;
         this._chosenBoy = boys[chosenBoyIndex];
     }
 
