@@ -233,21 +233,34 @@ export const boys: { [id in Name] : TBoy; } = {
 };
 
 const numberOfBoys = Object.keys(boys).length;
+// @ts-ignore
+const numberOfLocations = Object.keys(BoardLocation).filter(isNaN).length;
+// @ts-ignore
+const numberOfClothes = Object.keys(Clothes).filter(isNaN).length;
+// @ts-ignore
+const numberOfSports = Object.keys(Sport).filter(isNaN).length;
+// @ts-ignore
+const numberOfFoods = Object.keys(Food).filter(isNaN).length;
 
+import Rand, {PRNG} from 'rand-seed';
 export class Game {
 
     get chosenBoy(): TBoy {
         return this._chosenBoy;
     }
     private _chosenBoy: TBoy;
-    
-    constructor()
+    private rand: Rand;
+    constructor(seed:string)
     {
-        const chosenBoyIndex = (Math.random() * numberOfBoys) as Name;
+        this.rand = new Rand(seed);
+        const chosenBoyIndex = (this.rand.next() * numberOfBoys) as Name;
         this._chosenBoy = boys[chosenBoyIndex];
     }
     getLocationClue():string
     {
+        this.rand.next() * numberOfBoys
+        this.chosenBoy.location;
+        
         return undefined;
     }
     getSportClue():string
