@@ -4,8 +4,6 @@ import {BoardLocation, Clothes, ClueTypes, Food, Sport} from "./clueEnums";
 import {boys, type TBoy} from "./boys";
 
 
-
-
 export function BoyNameToEnum(name:string):Name
 {  
     const typedName = name as keyof typeof Name;
@@ -137,6 +135,7 @@ export class Game {
             case Name.Alex:
             case Name.James:
                 return ClueTypes.Clothes;
+            
 
         }
     }
@@ -175,20 +174,28 @@ export class Game {
     {
         return (Object.keys(phoneNumbers)).find(key => phoneNumbers[key] === boy) ??"";
     }
-
-    guess(guess: string) {
+    guessFromNumber(guess:string)
+    {
+        const boyName = this.phone(guess)
+        return this.guessBoy(boyName);
+    }
+    guessFromName(guess: string) {
         const boyNameGuessed:Name = BoyNameToEnum(guess);
+        return this.guessBoy(boyNameGuessed);
+
+    }
+
+     guessBoy(boyNameGuessed: Name) {
         const boyGuessed = boys[boyNameGuessed]
         console.log("Answer is:")
         console.log(this.crushBoy);
-        const boyName= (Object.keys(boys)).find((key) =>       
-             boys[BoyNameToEnum(key)] == this.crushBoy
+        const boyName = (Object.keys(boys)).find((key) =>
+            boys[BoyNameToEnum(key)] == this.crushBoy
         ) ?? "???";
-        
-        
-        console.log("boys name is "+boyName);
-       
-        return this.crushBoy === boyGuessed;        
-        
+
+
+        console.log("boys name is " + boyName);
+
+        return this.crushBoy === boyGuessed;
     }
 }

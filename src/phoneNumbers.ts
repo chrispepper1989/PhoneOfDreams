@@ -1,8 +1,8 @@
 ﻿
 export enum Name
 {
-        //Gamer
-        John,
+        //Gamer        
+        John =1,
         Brandon,
         Mark,
         Peter,
@@ -36,6 +36,8 @@ export enum Name
         Chris,
         Harry,
         Paul,
+
+     
 
 }
 

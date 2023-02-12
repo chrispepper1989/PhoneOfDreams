@@ -35,7 +35,11 @@ describe('Game gives right clues for specific boy: Adam ', () => {
     })
     it("returns true when player guesses Adam", () =>
     {
-        expect(game.guess("Adam")).toBe(true);
+        expect(game.guessFromName("Adam")).toBe(true);
+    });
+    it("returns true when player guesses Adams number", () =>
+    {
+        expect(game.guessFromNumber("555-1111")).toBe(true);
     });
     it('the chosen boys location is not given as a doesnt clue and all other locations are given', () => {
         

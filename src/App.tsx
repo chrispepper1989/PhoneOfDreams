@@ -8,9 +8,35 @@ import {Helmet} from "react-helmet";
 
 
 function App() {
-    const [game] = useState<Game>(new Game("123"));
+    const seedKey = "seedkey";
   
+    //const [game, setGame] = useState<Game>(new Game(seed));
+    const [seed,setSeed]= useState<string>("123");
+    const  game = new Game(seed);
 
+    function newGame()
+    {
+        const newSeed = crypto.randomUUID();
+        console.log("save seed is " +newSeed)        
+        localStorage.setItem(seedKey, seed);
+        setSeed(newSeed);
+    }
+    function loadGame()
+    {
+        let loadSeed = localStorage.getItem(seedKey) ;
+        console.log("load seed is " + loadSeed)
+        if(loadSeed) {         
+            setSeed(loadSeed);
+        }
+        else 
+            newGame();
+    }
+    
+    useEffect( () =>
+    {
+        loadGame(); 
+    },[]);
+    
     const display = "Phone Of Dreams";    
     
     function newClue(nameCalled: Name ):string {      
@@ -59,10 +85,10 @@ function App() {
         </head> 
         <div className="App">
                                 
-            <PhoneGrid onCall={handlePhoneCall} display={display} getPhoneNumber={game.getPhoneNumber} onGuess={(guess) => game.guess(guess)}></PhoneGrid>
+            <PhoneGrid onCall={handlePhoneCall} display={display} getPhoneNumber={game.getPhoneNumber} onGuess={(name) => game.guessFromName(name)}></PhoneGrid>
             
         </div>
-           
+           <button onClick={() => newGame()} > Playing Seed {seed}, Click for New Game</button>
         </>
     );
 }

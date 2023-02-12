@@ -1,4 +1,4 @@
-﻿import React, { useState} from "react";
+﻿import React, {useEffect, useState} from "react";
 import './PhoneGrid.css';
 import {Name} from "./phoneNumbers";
 import {BoyNameToEnum, EnumToNumberArray} from "./game";
@@ -27,7 +27,18 @@ export const PhoneGrid: React.FC<PhoneProps> = (phoneProps) => {
 
     const [playClick] = useSound(buttonSound);
     const [playMessage] = useSound(message);
+    const [phoneNumber, setPhoneNumber] = useState("555-");
+    const [isPhoneNumber, setIsPhoneNumber] = useState(true);
 
+    const [isGuessing, setIsGuessing] = useState(false);
+    const [input, setInput] = useState("");
+    const [guess, setGuess] = useState("none");
+    const [display, setDisplay] = useState(phoneProps.display ?? "555-");
+    const names = EnumToNumberArray(Name);
+    const [nameSelected, setNameSelected] = useState<string>("John");
+    const [speakerOn, setSpeakerOn] = React.useState(true);
+    const [lastClue, setLastClue] = React.useState<PhoneClue | undefined>(undefined);
+    const FakeBoy = "No One";
     function getVoices() {
         let voices = speechSynthesis.getVoices();
         if(!voices.length){
@@ -37,90 +48,115 @@ export const PhoneGrid: React.FC<PhoneProps> = (phoneProps) => {
         }
         return voices;
     }
+    useEffect( () =>
+    {
+        
+    },[display])
     
     function handleCallButton(number: string) {
-        if(isGuessing)
-        {
+        function handleGuess() {
             playMessage();
-            const correct = phoneProps.onGuess(display)
-            let message = correct ? `You are correct! ${display} liiiikes you! <3`
-                : `I am sorry you are wrong about ${display}`
+            setGuess(input);
+            const correct = phoneProps.onGuess(input);
+           
+            let message = correct ? `You are correct! ${input} liiiikes you! <3`
+                : `I am sorry you are wrong about ${input}`
+            
+            if(correct)
+            {
+                speakMessage("yes, I like you!");
+            }
+            else
+            {
+                speakMessage("Nope");
+            }
             setIsGuessing(false);
             setIsPhoneNumber(false);
             setDisplay(message);
         }
-        else {
+        function speakMessage(message:string) {
+            if (speakerOn) {
+                let speakData = new SpeechSynthesisUtterance(message);
+                speakData.voice = getVoices()[3];
+                speakData.volume = 0.05; // From 0 to 1
+                speakData.rate = 1; // From 0.1 to 10
+                speakData.pitch = 2; // From 0 to 2          
+                speakData.lang = 'en';
+                speechSynthesis.speak(speakData);
+            }
+        }
+        function handleCall() {
             //playMessage();
             const clue = phoneProps.onCall(number);
-            setNumber("555-");       
-            
-            
+            setNumber("555-");
             let clueText = `${clue.message}`;
-            if(clue.nameOfBoy) {
+           
+
+            if (clue.nameOfBoy) {
                 clueText = `📩 ${clue.nameOfBoy} says: ${clue.message}`;
-                
-                if(speakerOn) {
-                    let speakData = new SpeechSynthesisUtterance(clue.message);
-                    speakData.voice = getVoices()[3];
-                    speakData.volume = 0.05; // From 0 to 1
-                    speakData.rate = 1; // From 0.1 to 10
-                    speakData.pitch = 2; // From 0 to 2          
-                    speakData.lang = 'en';
-                    speechSynthesis.speak(speakData);
-                }
+                setLastClue(clue)
+                speakMessage(clue.message);
             }
-                      
+            else if(lastClue)
+            {
+                clueText = `📩 ${lastClue.nameOfBoy} says: ${lastClue.message}`;
+                speakMessage(lastClue.message);
+            }
+
             setDisplay(clueText);
             setIsPhoneNumber(false)
             setIsGuessing(false);
         }
+
+        if(isGuessing)
+        {
+            handleGuess();
+        }
+        else {
+            handleCall();
+        }
     }
 
     function setNumber(number: string) {
-        setIsPhoneNumber(true)
+        setInput(number);
         setPhoneNumber(number);
+        setIsPhoneNumber(true)
         setDisplay(number)
+        console.log("display is " + number );
     }
 
     function handleClearClick() {
         playClick();
         setNumber("555-");
+        setLastClue(undefined)
+        setNameSelected(FakeBoy);
     }
 
     function handleButtonClick(number: string) {
         playClick();
-        
+        console.log("number pressed " + number);
         if (phoneNumber.length < maxNumberInput)
             setNumber(phoneNumber + number);
     }
 
     function handleGuessButton() {
         playClick();
-        setDisplay("");
+        setDisplay("Guessing");
+        setInput("Guess")
         setIsGuessing(true);
-    }
-
-    const [phoneNumber, setPhoneNumber] = useState("555-");
-    const [isPhoneNumber, setIsPhoneNumber] = useState(true);
-    
-    const [isGuessing, setIsGuessing] = useState(false);
-    const [display, setDisplay] = useState(phoneProps.display ?? "555-");
-    const names = EnumToNumberArray(Name);
-    const [nameSelected, setNameSelected] = useState<string>("John");
-    const [speakerOn, setSpeakerOn] = React.useState(true);
+    }   
     
     const handleSpeedDialChange = (e: any) => {
 
         const nameCalled: Name = BoyNameToEnum(e.target.value);        
         const number = phoneProps.getPhoneNumber(nameCalled);
                 
-        if(isGuessing) {
-            setDisplay(Name[nameCalled]);
+        if(isGuessing) {          
+            setInput(Name[nameCalled]);
         }
         else
         {
-            setNumber(number);
-            
+            setNumber(number);            
         }
         console.log(nameCalled);
         setNameSelected(Name[nameCalled]);
@@ -129,7 +165,7 @@ export const PhoneGrid: React.FC<PhoneProps> = (phoneProps) => {
     function handleInputChange(event: any) {
 
         if (isGuessing) {
-            setDisplay(event.target.value);
+            setInput(event.target.value);
         } else {
             const charEntered: string = event.target.value[event.target.value.length - 1];
             if (!isNaN(Number(charEntered))) {
@@ -143,8 +179,8 @@ export const PhoneGrid: React.FC<PhoneProps> = (phoneProps) => {
 
             <div className="container">
                 <div className="buttons">
-                    {[...Array(9)].map((x, i) =>
-                        <div className={`button-${i+1}`}><button onClick={() => handleButtonClick(`${i}`)}  >{i}</button></div>
+                    {[...Array(9)].map((x, i) =>                        
+                        <div className={`button-${i+1}`}><button onClick={() => handleButtonClick(`${i+1}`)}  >{i+1}</button></div>
                     )}
                     <div className="star"><button      onClick={() => handleGuessButton()}>*</button></div>
                     <div className="guess"><button     onClick={() => handleGuessButton()}>#</button></div>
@@ -153,7 +189,7 @@ export const PhoneGrid: React.FC<PhoneProps> = (phoneProps) => {
                 <div className="screen">
                     <div className="Screen display">
                         {isPhoneNumber || isGuessing?
-                            <input value={display} onChange={handleInputChange}/>
+                            <input value={input} onChange={handleInputChange}/>
                             :
                             <div>{display}</div>}
                            
@@ -161,6 +197,8 @@ export const PhoneGrid: React.FC<PhoneProps> = (phoneProps) => {
                     <div className="speedDial">                      
                         <label htmlFor="dropdown">Speed Dial:</label>
                         <select id="dropdown" value={nameSelected} onChange={handleSpeedDialChange}>
+                            <option key={9999} value={FakeBoy} disabled={true}>Please Select Someone</option>
+                          
                             {names.map((x: Name) => <option key={Name[x]} value={Name[x]}>{Name[x]}</option>)}
                         </select>
 
@@ -173,7 +211,7 @@ export const PhoneGrid: React.FC<PhoneProps> = (phoneProps) => {
                         />
                       
                     </div>
-                    <div className="end"><button onClick={() => handleClearClick()}>End</button></div>
+                    <div className="end"><button onClick={() => handleClearClick()}>Clear</button></div>
                     <div className="call"><button onClick={() => handleCallButton(phoneNumber)}>Call</button></div>
                 </div>
                 
