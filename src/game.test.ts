@@ -39,4 +39,12 @@ describe('Game has Clues ', () =>
         const clue = game.getClue(11);
         expect(clue).toContain("play");
     });
+    it('calling phone 555-2442 gets a clue from Nick', () => {
+
+        const expectedNumber = "555-2442"
+        const name = game.phone(expectedNumber);
+        expect(name).toBe(Name.Nick);
+        const clue = game.getClue(name);
+        expect(clue).toContain("play");
+    });
 })
