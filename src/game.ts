@@ -1,4 +1,5 @@
 ﻿import Rand from 'rand-seed';
+import {Name, phoneNumbers} from "./phoneNumbers";
 
 enum BoardLocation {
     Cinema,
@@ -35,45 +36,7 @@ enum Clothes
     Hat=16,
     Orange=32
 }
-export enum Name
-{
-    //Gamer
-    John,
-    Brandon,
-    Mark,
-    Peter,
-    
-    //Beach
-    Michael,
-    David,
-    Josh,
-    Alex,
-    
-    //Buckly
-    Nick,
-    Jack,
-    Tyler,
-    Patrick,
-    
-    //Theater
-    Anthony,
-    James,
-    Will,
-    Matt,
-    
-    //Town Park
-    Tom,
-    Luke,
-    Jason,
-    Ben,
-    
-    //Mall,
-    Adam,
-    Chris,
-    Harry,
-    Paul,
-    
-}
+
 
 type TBoy = {
     location: BoardLocation,
@@ -352,6 +315,9 @@ export class Game {
         }
         
         return  "Sorry not saying anything";
-    }   
-   
+    }
+
+    phone(expectedNumber: string):Name {
+        return phoneNumbers[expectedNumber];
+    }
 }

@@ -1,6 +1,45 @@
-﻿import {Name} from "./game";
+﻿
+export enum Name
+{
+        //Gamer
+        John,
+        Brandon,
+        Mark,
+        Peter,
 
-export const PhoneNumbers =
+        //Beach
+        Michael,
+        David,
+        Josh,
+        Alex,
+
+        //Buckly
+        Nick,
+        Jack,
+        Tyler,
+        Patrick,
+
+        //Theater
+        Anthony,
+        James,
+        Will,
+        Matt,
+
+        //Town Park
+        Tom,
+        Luke,
+        Jason,
+        Ben,
+
+        //Mall,
+        Adam,
+        Chris,
+        Harry,
+        Paul,
+
+}
+
+export const phoneNumbers: Record<string, Name> =
     {
         //Gamer
         ["555-6544"]: Name.John,

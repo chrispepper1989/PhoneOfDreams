@@ -1,4 +1,5 @@
-﻿import {Game, Name} from "./game";
+﻿import {Game} from "./game";
+import {Name} from "./phoneNumbers";
 
 describe('Game gives right clues for specific boy ', () => {
     const game = new Game("123");
@@ -40,11 +41,10 @@ describe('Game has Clues ', () =>
         expect(clue).toContain("play");
     });
     it('calling phone 555-2442 gets a clue from Nick', () => {
-
         const expectedNumber = "555-2442"
         const name = game.phone(expectedNumber);
         expect(name).toBe(Name.Nick);
         const clue = game.getClue(name);
-        expect(clue).toContain("play");
+        expect(clue).toContain("hang");
     });
 })
