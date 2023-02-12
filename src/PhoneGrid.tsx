@@ -2,6 +2,14 @@
 import './PhoneGrid.css';
 import {Name} from "./phoneNumbers";
 import {BoyNameToEnum, EnumToNumberArray} from "./game";
+import useSound from 'use-sound'
+
+
+
+// @ts-ignore
+import buttonSound from './button-click.mp3' 
+// @ts-ignore
+import message from './message.mp3'
 
 export interface PhoneProps {
     onCall: (number:string)=>string
@@ -12,9 +20,13 @@ export interface PhoneProps {
 export const PhoneGrid: React.FC<PhoneProps> = (phoneProps) => {
     const maxNumberInput = 8;
 
+    const [playClick] = useSound(buttonSound);
+    const [playMessage] = useSound(message);
+    
     function handleCallButton(number: string) {
         if(isGuessing)
         {
+            playMessage();
             const correct = phoneProps.onGuess(display)
             let message = correct ? `You are correct! ${display} liiiikes you! <3`
                 : `I am sorry you are wrong about ${display}`
@@ -23,6 +35,7 @@ export const PhoneGrid: React.FC<PhoneProps> = (phoneProps) => {
             setDisplay(message);
         }
         else {
+            playMessage();
             const clue = phoneProps.onCall(number);
             setNumber("555-");
             setDisplay(clue);
@@ -38,16 +51,19 @@ export const PhoneGrid: React.FC<PhoneProps> = (phoneProps) => {
     }
 
     function handleClearClick() {
+        playClick();
         setNumber("555-");
     }
 
     function handleButtonClick(number: string) {
-
+        playClick();
+        
         if (phoneNumber.length < maxNumberInput)
             setNumber(phoneNumber + number);
     }
 
     function handleGuessButton() {
+        playClick();
         setDisplay("");
         setIsGuessing(true);
     }
