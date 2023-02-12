@@ -1,20 +1,39 @@
-﻿import {boys, Game} from "./game";
+﻿import {boys, EnumToStringArray, EnumToStringArrayWithout, Game} from "./game";
 import {Name} from "./phoneNumbers";
 import {BoardLocation} from "./clueEnums";
 
 function getLastWord(str:string)
 {
-    // 1) The slice() method: without Considering the punctuation marks
-    return str.slice(str.lastIndexOf(' ')); 
+    if(str)    
+        return str.slice(str.lastIndexOf(' ')).trimStart();
+    else
+        return "";
 }
+function distinct(array:string[]):string[]{
+    return array.filter((value, index, array) => array.indexOf(value) === index);
+}
+
+describe(`enum helper functions`, () => {
+    enum test {Apple, Orange, Pear}
+    
+    it("Enum array without", () =>{         
+          expect(EnumToStringArrayWithout(test, test.Apple)).toStrictEqual(["Orange", "Pear"])
+    })
+    it("Enum array ", () =>{
+        expect(EnumToStringArray(test)).toStrictEqual(["Apple", "Orange", "Pear"])
+    })
+});
 
 describe('Game gives right clues for specific boy ', () => {
     const game = new Game("123");
-    game.setBoy(Name.Adam)
-    it('has a defined boy', () => {
-        expect(game.chosenBoy).toBe(Name.Adam)
-    });
-    it('has a defined boy', () => {
+    const expectedBoy = Name.Adam
+    game.setBoy(expectedBoy)
+    
+    it('has the correct defined boy', () => {
+        expect(game.chosenBoy).toBe( boys[expectedBoy]);
+    })
+    it('the chosen boys location is not given as a doesnt clue and all other locations are given', () => {
+        
         //exhaust location clues
         const clues:string[] = [];
         clues.push(getLastWord(game.getClue(Name.John)));
@@ -24,10 +43,13 @@ describe('Game gives right clues for specific boy ', () => {
         clues.push(getLastWord(game.getClue(Name.Ben)));
         clues.push(getLastWord(game.getClue(Name.Nick)));
         
-        const fullBoy = boys[Name.Adam];
+        const fullBoy = boys[expectedBoy];
         const boylocationAsString = BoardLocation[fullBoy.location];
-        expect(game.chosenBoy).toBe(Name.Adam);
+        
         expect(clues).not.toContain(boylocationAsString)
+        const clueLocations = EnumToStringArrayWithout(BoardLocation,fullBoy.location);
+        var unique = distinct(clues);
+        expect(unique).toContain(clueLocations);
     });
     
 });

@@ -15,7 +15,7 @@ export function BoyNameToEnum(name:string):Name
     const typedName = name as keyof typeof Name;
     return Name[typedName];
 }
-function EnumToStringArrayWithout(anEnum:any, element:any) {
+export function EnumToStringArrayWithout(anEnum:any, element:any) {
 
     return Object.keys(anEnum)
         .filter(value => !isNaN(Number(value)))
@@ -237,6 +237,7 @@ export class Game {
         return `He doesnt wear ${this.getEnumClue(Clothes,  this._chosenBoy.wears)}`;
     }
     
+
     getClue(boyCalled:Name):string{ 
         /*
         The boys from John to Nick will give a clue about the hang out location. 
