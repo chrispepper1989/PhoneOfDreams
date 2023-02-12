@@ -1,6 +1,6 @@
 ﻿import Rand from 'rand-seed';
 import {Name, phoneNumbers} from "./phoneNumbers";
-import {BoardLocation, Clothes, Food, Sport} from "./clueEnums";
+import {BoardLocation, Clothes, ClueTypes, Food, Sport} from "./clueEnums";
 
 
 type TBoy = {
@@ -199,6 +199,15 @@ export class Game {
         return this._chosenBoy;
     }
     private _chosenBoy: TBoy;
+    
+
+    clueIndexes: Record<ClueTypes, number> =
+        {
+            [ClueTypes.BoardLocation]: 0,
+            [ClueTypes.Sport]: 0,
+            [ClueTypes.Food]: 0,
+            [ClueTypes.Clothes]: 0
+        };
     private rand: Rand;
     private RandInt(max:number):number
     {
@@ -210,77 +219,105 @@ export class Game {
         const chosenBoyIndex = this.RandInt(numberOfBoys) as Name;
         this._chosenBoy = boys[chosenBoyIndex];
         this.setBoy(chosenBoyIndex);
+
     }
 
-    getEnumClue(theEnum: any, boyValue:any|undefined):string
-    {        
-        let enumValues:any = [];
-        enumValues = boyValue ? EnumToStringArray(theEnum) : EnumToStringArrayWithout(theEnum,  boyValue);
-        const enumValueIndex = this.RandInt(enumValues.length);
-        const enumValueAsString = enumValues[enumValueIndex];
+    getEnumClue(theEnum: any, clueType:ClueTypes, boyValue:any|undefined):string
+    {
+        const index = this.clueIndexes[clueType];
+        const enumValues:any = boyValue ?  EnumToStringArrayWithout(theEnum,  boyValue) : EnumToStringArray(theEnum);     
+        const enumValueAsString = enumValues[index];
+
+        this.clueIndexes[clueType]++;
+        if(this.clueIndexes[clueType] >= enumValues.length)
+        {
+            this.clueIndexes[clueType] = 0;
+        }
+            
         return enumValueAsString;
     }
+    
+    
     getLocationClue():string
-    {
-        return `He doesnt hang out at ${this.getEnumClue(BoardLocation,  this._chosenBoy.location)}`;
+    {        
+        return `He doesnt hang out at ${this.getEnumClue(BoardLocation, ClueTypes.BoardLocation, this._chosenBoy.location)}`;
     }
     getSportClue():string
-    {
-        return `He doesnt play ${this.getEnumClue(Sport,  this._chosenBoy.sport)}`;
+    {      
+        return `He is not interested in ${this.getEnumClue(Sport, ClueTypes.Sport, this._chosenBoy.sport)}`;
     }
     getFoodClue():string
-    {
-        return `He doesnt eat ${this.getEnumClue(Food,  this._chosenBoy.food)}`;
+    {       
+        return `He doesnt eat ${this.getEnumClue(Food, ClueTypes.Food, this._chosenBoy.food)}`;
     }
     getClothesClue():string
-    {
-        return `He doesnt wear ${this.getEnumClue(Clothes,  this._chosenBoy.wears)}`;
+    { 
+        return `He doesnt wear ${this.getEnumClue(Clothes,ClueTypes.Clothes,  this._chosenBoy.wears)}`;
     }
     
-
-    getClue(boyCalled:Name):string{ 
+    getClueType(boyCalled:Name):ClueTypes
+    {
         /*
-        The boys from John to Nick will give a clue about the hang out location. 
-        Adam through Tyler will give clues about sports.
-        Paul through Jason will give out clues about food. 
-        Will through James will give out clues about clothing.
-         */
-        
-        
+       The boys from John to Nick will give a clue about the hang out location. 
+       Adam through Tyler will give clues about sports.
+       Paul through Jason will give out clues about food. 
+       Will through James will give out clues about clothing.
+        */
         switch (boyCalled)
         {
-            case Name.John:                
+            case Name.John:
             case Name.Luke:
             case Name.Michael:
             case Name.Harry:
             case Name.Ben:
             case Name.Nick:
-                return this.getLocationClue();
+                return ClueTypes.BoardLocation;
             case Name.Adam:
             case Name.Josh:
             case Name.Patrick:
             case Name.Peter:
             case Name.Anthony:
             case Name.Tyler:
-                return this.getSportClue();
+                return ClueTypes.Sport;
             case Name.Paul:
             case Name.Mark:
             case Name.David:
             case Name.Jack:
             case Name.Tom:
             case Name.Jason:
-                return this.getFoodClue();
+                return ClueTypes.Food;
             case Name.Will:
             case Name.Chris:
             case Name.Brandon:
             case Name.Matt:
             case Name.Alex:
             case Name.James:
-                return  this.getClothesClue();
+                return ClueTypes.Clothes;
 
         }
-        
-        return  "Sorry not saying anything";
+    }
+
+    getClueFromBoy(boyCalled:Name):string{ 
+       
+        const clueType = this.getClueType(boyCalled);
+
+        return this.getClue(clueType);
+    }
+
+    getClue(clueType: ClueTypes) {
+        switch (clueType) {
+            case ClueTypes.BoardLocation:
+                return this.getLocationClue();
+            case ClueTypes.Sport:
+                return this.getSportClue();
+            case ClueTypes.Food:
+                return this.getFoodClue();
+            case ClueTypes.Clothes:
+                return this.getClothesClue();
+
+        }
+
+        return "Sorry not saying anything";
     }
 
     phone(expectedNumber: string):Name {
@@ -288,7 +325,7 @@ export class Game {
     }
     phoneClue(expectedNumber: string)
     {
-        return this.getClue(this.phone(expectedNumber));
+        return this.getClueFromBoy(this.phone(expectedNumber));
     }
     getPhoneNumber(boy:Name) : string
     {

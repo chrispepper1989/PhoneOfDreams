@@ -28,7 +28,7 @@ function App() {
         console.log("Clue From:")
         console.log(nameCalled);
         console.log(nameCalled as Name);
-        const clue= game.getClue(nameCalled);
+        const clue= game.getClueFromBoy(nameCalled);
         console.log(clue);
         let currentClues = clues ?? [];
         currentClues?.push(clue);

@@ -1,4 +1,12 @@
-﻿export enum BoardLocation {
+﻿export enum ClueTypes
+{
+    BoardLocation,
+    Sport,
+    Food,
+    Clothes
+}
+
+export enum BoardLocation {
     Cinema,
     HighSchool,
     TownPark,
