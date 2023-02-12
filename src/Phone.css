@@ -1,14 +1,20 @@
 ﻿body {
     font-family: sans-serif;
     color: #333;
+   
     text-align: center;
 }
+
+
+
+
 .container {
     width: 24vw;
     margin: 50px auto;
     border: 1px solid #333;
     border-radius: 10px;
-    background: #eee;
+    
+    background-color: palevioletred;
 }
 a {
     display: inline-block;
@@ -41,12 +47,35 @@ a:hover {
     width: 20vw;
     margin: 6%;
 }
+
+
+a:active {
+    transform: translateY(5px);
+}
+
+.screen
+{
+    box-sizing: border-box;
+    background-color: darkgreen;
+    width: 85%;
+    margin:auto;
+    margin-top: 25px;
+    border: solid black 3px;
+    padding: 5px; 
+    height: 150px;
+}
+
 input {
+   
+    font-smooth: never;
+    -webkit-font-smoothing : none;
+    overflow-wrap: break-word;
     background: transparent;
+    opacity: 60;
     width: 90%;
     border: 0;
     outline: none;
-    font-size: 25px;
+    
     margin: 25px 0;
     text-align: center;
 }

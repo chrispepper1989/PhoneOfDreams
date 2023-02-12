@@ -1,41 +1,6 @@
 ﻿import Rand from 'rand-seed';
 import {Name, phoneNumbers} from "./phoneNumbers";
-
-enum BoardLocation {
-    Cinema,
-    HighSchool,
-    TownPark,
-    Mall,
-    GamerLounge,
-    Beach,
-}
-enum Sport
-{
-    Baseball,
-    Hocky,
-    Surfing,
-    Football,
-    Tennis,
-    BasketBall
-}
-enum Food
-{
-    IceCream,
-    Fruit,
-    Chocolate,
-    Burgers,
-    Fries,
-    Pizza,
-}
-enum Clothes
-{
-    Jeans=1,
-    Sneakers=2,
-    Shades=4,
-    Jacket=8,
-    Hat=16,
-    Orange=32
-}
+import {BoardLocation, Clothes, Food, Sport} from "./clueEnums";
 
 
 type TBoy = {
@@ -319,5 +284,13 @@ export class Game {
 
     phone(expectedNumber: string):Name {
         return phoneNumbers[expectedNumber];
+    }
+    phoneClue(expectedNumber: string)
+    {
+        return this.getClue(this.phone(expectedNumber));
+    }
+    getPhoneNumber(boy:Name) : string
+    {
+        return (Object.keys(phoneNumbers)).find(key => phoneNumbers[key] === boy) ??"";
     }
 }

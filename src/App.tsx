@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
 import './App.css';
-import {BoyNameToEnum, EnumToNumberArray, Game, Name} from "./game";
+import {BoyNameToEnum, EnumToNumberArray, Game} from "./game";
 import {Phone} from "./Phone";
+import {Name} from "./phoneNumbers";
 
 
 
@@ -15,18 +16,13 @@ const Clues = (clues: string[] | undefined) => {
 
 function App() {
 
-    const names = EnumToNumberArray(Name);
+    
     
     const [game,setGame] = useState<Game>(new Game("123"));
     const [clues, setClues] = useState<string[]>();
     const [clueLength, setClueLength] = useState<number>(0);
-    const [nameSelected, setNameSelected] = useState<Name>(Name.John);
+    const latestClue = clues ? clues[clues.length - 1] : undefined;
 
-    const handleChange = (e: any) => {
-        const nameCalled:Name = BoyNameToEnum(e.target.value);
-        setNameSelected(nameCalled);
-    };
-    
     function newClue(nameCalled: Name ) {
         
         console.log("Clue From:")
@@ -38,15 +34,15 @@ function App() {
         currentClues?.push(clue);
         setClueLength(currentClues.length);
         setClues(currentClues);
+       
     }
   
     
-    const MakeItem = function (name: string, value: Name) {
-        return <option key={value} value={name}>{name}</option>;
-    };
+    
 
     function handlePhoneCall(number:string) {
-        console.log("Phone: " + number);
+        const boy = game.phone(number);
+        newClue(boy);
     }
 
     return (
@@ -54,12 +50,8 @@ function App() {
           
             <center><h1>DreamPhone</h1></center>
             {Clues(clues)}
-            <Phone onCall={handlePhoneCall}></Phone>
-            <h2>Speed Dial</h2>
-            <select id="dropdown" value={nameSelected} onChange={handleChange}>
-                {names.map((x: Name) => MakeItem(Name[x], x))}
-            </select>
-            <button onClick={() => newClue(nameSelected)}> Speed Dial</button>
+            <Phone game={game} onCall={handlePhoneCall} display={latestClue}></Phone>           
+           
           
         </div>
 
