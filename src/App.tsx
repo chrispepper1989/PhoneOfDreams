@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
 import './App.css';
-import {BoyNameToEnum, EnumToNumberArray, Game} from "./game";
-import {Phone} from "./Phone";
+import {Game} from "./game";
+
 import {Name} from "./phoneNumbers";
+import {PhoneGrid} from "./PhoneGrid";
 
 
 
@@ -36,15 +37,14 @@ function App() {
         setClues(currentClues);
         return clue;
        
-    }    
-    
+    }        
 
     function handlePhoneCall(number:string):string {
         const boy = game.phone(number);
         if(boy) {
             const clue = newClue(boy);
             const boyName = Name[boy]
-            return `${boyName} says: ${clue}`;
+            return `📩 ${boyName} says: ${clue}`;
         }
         return "Sorry wrong number";
     }
@@ -52,8 +52,8 @@ function App() {
     return (
         <div className="App">
                                 
-            <Phone onCall={handlePhoneCall} display={latestClue} getPhoneNumber={game.getPhoneNumber} onGuess={(guess) => game.guess(guess)}></Phone>
-            {Clues(clues)}
+            <PhoneGrid onCall={handlePhoneCall} display={latestClue} getPhoneNumber={game.getPhoneNumber} onGuess={(guess) => game.guess(guess)}></PhoneGrid>
+            
         </div>
 
     );

@@ -1,5 +1,5 @@
 ﻿import React, { useState} from "react";
-import './Phone.css';
+import './PhoneGrid.css';
 import {Name} from "./phoneNumbers";
 import {BoyNameToEnum, EnumToNumberArray} from "./game";
 
@@ -9,10 +9,10 @@ export interface PhoneProps {
     getPhoneNumber:(name:Name) => string
     display?:string,
 }
-export const Phone: React.FC<PhoneProps> = (phoneProps) => {
+export const PhoneGrid: React.FC<PhoneProps> = (phoneProps) => {
     const maxNumberInput = 8;
 
-    function onCallButton(number: string) {
+    function handleCallButton(number: string) {
         if(isGuessing)
         {
             const correct = phoneProps.onGuess(display)
@@ -94,36 +94,33 @@ export const Phone: React.FC<PhoneProps> = (phoneProps) => {
         return (
 
             <div className="container">
-
+                <div className="buttons">
+                    {[...Array(9)].map((x, i) =>
+                        <div className={`button-${i+1}`}><button onClick={() => handleButtonClick(`${i}`)}  >{i}</button></div>
+                    )}
+                    <div className="star"><button      onClick={() => handleGuessButton()}>*</button></div>
+                    <div className="guess"><button     onClick={() => handleGuessButton()}>#</button></div>
+                    <div className="button-0"><button  onClick={() => handleButtonClick(`0`)}>0</button></div>
+                </div>
                 <div className="screen">
-                    {isPhoneNumber || isGuessing?
-                        <input value={display} onChange={handleInputChange}/>
-                        :
-                        <div>{display}</div>}
+                    <div className="Screen display">
+                        {isPhoneNumber || isGuessing?
+                            <input value={display} onChange={handleInputChange}/>
+                            :
+                            <div>{display}</div>}
+                    </div>
+                    <div className="speedDial">                      
+                        <label htmlFor="dropdown">Speed Dial:</label>
+                        <select id="dropdown" value={nameSelected} onChange={handleSpeedDialChange}>
+                            {names.map((x: Name) => <option key={Name[x]} value={Name[x]}>{Name[x]}</option>)}
+                        </select>                        
+                    </div>
+                    <div className="end"><button onClick={() => handleClearClick()}>End</button></div>
+                    <div className="call"><button onClick={() => handleCallButton(phoneNumber)}>Call</button></div>
                 </div>
-                <div className="speedDial">
-                    <label>Speed Dial:</label>
-                    <select id="dropdown" value={nameSelected} onChange={handleSpeedDialChange}>
-                       
-                        {names.map((x: Name) => <option key={Name[x]} value={Name[x]}>{Name[x]}</option>)}
-                    </select>
-                </div>
-                <div className="row"><a onClick={() => handleButtonClick('1')} href="#">1</a><a
-                    onClick={() => handleButtonClick("2")} href="#">2</a><a onClick={() => handleButtonClick('3')}
-                                                                            href="#">3</a></div>
-                <div className="row"><a onClick={() => handleButtonClick('4')} href="#">4</a><a
-                    onClick={() => handleButtonClick("5")} href="#">5</a><a onClick={() => handleButtonClick('6')}
-                                                                            href="#">6</a></div>
-                <div className="row"><a onClick={() => handleButtonClick('7')} href="#">7</a><a
-                    onClick={() => handleButtonClick("8")} href="#">8</a><a onClick={() => handleButtonClick('9')}
-                                                                            href="#">9</a></div>
-                <div className="row"><a onClick={() => handleButtonClick('*')} href="#">*</a><a
-                    onClick={() => handleButtonClick("0")} href="#">0</a><a onClick={() => handleGuessButton()}
-                                                                            href="#">#</a></div>
-                <div className="row"><a onClick={() => onCallButton(phoneNumber)} className="call" href="#"><i
-                    className="fa fa-phone">Call</i></a></div>
-                <div className="row"><a onClick={() => handleClearClick()} className="clear" href="#"><i
-                    className="fa fa-phone">Clear</i></a></div>
-            </div>);
+                
+            </div>
+            
+);
     
 }
