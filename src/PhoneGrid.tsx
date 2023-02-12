@@ -52,20 +52,29 @@ export const PhoneGrid: React.FC<PhoneProps> = (phoneProps) => {
         else {
             //playMessage();
             const clue = phoneProps.onCall(number);
-            setNumber("555-");
-           
+            setNumber("555-");       
+            
+            
             let clueText = `${clue.message}`;
-            if(clue.nameOfBoy)
+            if(clue.nameOfBoy) {
                 clueText = `📩 ${clue.nameOfBoy} says: ${clue.message}`;
+                
+                if(speakerOn) {
+                    let speakData = new SpeechSynthesisUtterance(clue.message);
+                    speakData.voice = getVoices()[3];
+                    speakData.volume = 0.05; // From 0 to 1
+                    speakData.rate = 1; // From 0.1 to 10
+                    speakData.pitch = 2; // From 0 to 2          
+                    speakData.lang = 'en';
+                    speechSynthesis.speak(speakData);
+                }
+            }
                       
             setDisplay(clueText);
-            let speakData = new SpeechSynthesisUtterance(clue.message);
-            speakData.volume = 0.05; // From 0 to 1
-            speakData.rate = 1; // From 0.1 to 10
-            speakData.pitch = 2; // From 0 to 2          
-            speakData.lang = 'en';
-            speakData.voice = getVoices()[3];
-            speechSynthesis.speak(speakData);
+            
+            
+            
+            
 
 
 
@@ -105,7 +114,8 @@ export const PhoneGrid: React.FC<PhoneProps> = (phoneProps) => {
     const [display, setDisplay] = useState(phoneProps.display ?? "555-");
     const names = EnumToNumberArray(Name);
     const [nameSelected, setNameSelected] = useState<string>("John");
-
+    const [speakerOn, setSpeakerOn] = React.useState(true);
+    
     const handleSpeedDialChange = (e: any) => {
 
         const nameCalled: Name = BoyNameToEnum(e.target.value);        
@@ -154,12 +164,22 @@ export const PhoneGrid: React.FC<PhoneProps> = (phoneProps) => {
                             <input value={display} onChange={handleInputChange}/>
                             :
                             <div>{display}</div>}
+                           
                     </div>
                     <div className="speedDial">                      
                         <label htmlFor="dropdown">Speed Dial:</label>
                         <select id="dropdown" value={nameSelected} onChange={handleSpeedDialChange}>
                             {names.map((x: Name) => <option key={Name[x]} value={Name[x]}>{Name[x]}</option>)}
-                        </select>                        
+                        </select>
+
+                        <label htmlFor="speaker" style={{display:"inline", paddingTop:"5px"}}>Speaker Phone</label>                    
+                        <input id="speaker"
+                               type="checkbox"
+                               defaultChecked={speakerOn}
+                               style={{display:"inline", marginTop:"-25px"}}
+                               onChange={() => setSpeakerOn(!speakerOn)}
+                        />
+                      
                     </div>
                     <div className="end"><button onClick={() => handleClearClick()}>End</button></div>
                     <div className="call"><button onClick={() => handleCallButton(phoneNumber)}>Call</button></div>
