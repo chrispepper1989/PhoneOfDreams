@@ -181,6 +181,13 @@ export class Game {
         const boyGuessed = boys[boyNameGuessed]
         console.log("Answer is:")
         console.log(this.crushBoy);
+        const boyName= (Object.keys(boys)).find((key) =>       
+             boys[BoyNameToEnum(key)] == this.crushBoy
+        ) ?? "???";
+        
+        
+        console.log("boys name is "+boyName);
+       
         return this.crushBoy === boyGuessed;        
         
     }

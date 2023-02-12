@@ -3,7 +3,7 @@ import './App.css';
 import {Game} from "./game";
 
 import {Name} from "./phoneNumbers";
-import {PhoneGrid} from "./PhoneGrid";
+import {PhoneClue, PhoneGrid} from "./PhoneGrid";
 import {Helmet} from "react-helmet";
 
 
@@ -24,14 +24,14 @@ function App() {
        
     }        
 
-    function handlePhoneCall(number:string):string {
+    function handlePhoneCall(number:string):PhoneClue {
         const boy = game.phone(number);
         if(boy) {
             const clue = newClue(boy);
-            const boyName = Name[boy]
-            return `📩 ${boyName} says: ${clue}`;
+            const boyName = Name[boy]            
+            return {message:clue, nameOfBoy:boyName};
         }
-        return "Sorry wrong number";
+        return {message:"Sorry wrong number"};
     }
 
     let kofiSettings = "  " +

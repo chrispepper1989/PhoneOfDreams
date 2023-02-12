@@ -11,8 +11,13 @@ import buttonSound from './button-click.mp3'
 // @ts-ignore
 import message from './message.mp3'
 
+export interface PhoneClue
+{
+    nameOfBoy?: string,
+    message: string,
+}
 export interface PhoneProps {
-    onCall: (number:string)=>string
+    onCall: (number:string)=>PhoneClue
     onGuess: (name:string)=>boolean
     getPhoneNumber:(name:Name) => string
     display?:string,
@@ -22,6 +27,16 @@ export const PhoneGrid: React.FC<PhoneProps> = (phoneProps) => {
 
     const [playClick] = useSound(buttonSound);
     const [playMessage] = useSound(message);
+
+    function getVoices() {
+        let voices = speechSynthesis.getVoices();
+        if(!voices.length){
+            let utterance = new SpeechSynthesisUtterance("");
+            speechSynthesis.speak(utterance);
+            voices = speechSynthesis.getVoices();
+        }
+        return voices;
+    }
     
     function handleCallButton(number: string) {
         if(isGuessing)
@@ -35,10 +50,22 @@ export const PhoneGrid: React.FC<PhoneProps> = (phoneProps) => {
             setDisplay(message);
         }
         else {
-            playMessage();
+            //playMessage();
             const clue = phoneProps.onCall(number);
             setNumber("555-");
-            setDisplay(clue);
+           
+            const clueText =  `📩 ${clue.nameOfBoy} says: ${clue.message}`;
+            setDisplay(clueText);
+            let speakData = new SpeechSynthesisUtterance(clue.message);
+            speakData.volume = 0.05; // From 0 to 1
+            speakData.rate = 1; // From 0.1 to 10
+            speakData.pitch = 2; // From 0 to 2          
+            speakData.lang = 'en';
+            speakData.voice = getVoices()[3];
+            speechSynthesis.speak(speakData);
+
+
+
             setIsPhoneNumber(false)
             setIsGuessing(false);
         }
