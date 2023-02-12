@@ -51,8 +51,7 @@ function App() {
 
     return (
         <div className="App">
-          
-            <center><h1>Phone Of Dreams</h1></center>            
+                                
             <Phone onCall={handlePhoneCall} display={latestClue} getPhoneNumber={game.getPhoneNumber} onGuess={(guess) => game.guess(guess)}></Phone>
             {Clues(clues)}
         </div>

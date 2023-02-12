@@ -5,24 +5,34 @@
     text-align: center;
 }
 
-
-
-
 .container {
-    width: 24vw;
-    margin: 50px auto;
+    height: 100%;
+    width: 50vw;
+    margin:auto;
+    /*max-width: 54vw;*/
     border: 1px solid #333;
     border-radius: 10px;
-    
+
     background-color: palevioletred;
 }
+
+@media only screen and (max-width: 768px) {
+    /* For mobile phones: */
+    .container {
+
+        width: 100%;
+        height: 100%;
+    }
+}
+
 a {
     display: inline-block;
     border: 1px solid #333;
     border-radius: 5px;
     text-align: center;
-    width: 6vw;
-    height: 5vw;
+    width: 25%;
+
+ 
     line-height: 5vw;
     margin: 2%;
     font-size: 2vw;
@@ -40,12 +50,14 @@ a:hover {
     color: #fff;
     width: 20vw;
     margin: 6%;
+    width: 50%;
 }
 .clear {
     background: darkred;
     color: #fff;
     width: 20vw;
     margin: 6%;
+    width: 50%;
 }
 
 
@@ -61,7 +73,7 @@ a:active {
     border-radius: 10px;
     box-sizing: border-box;
     background-color: darkgreen;
-    width: 85%;
+    
 
     margin:20px;
     
@@ -69,6 +81,7 @@ a:active {
     padding: 10px; 
     height: 150px;
     font-size:  large;
+
     
 }
 
