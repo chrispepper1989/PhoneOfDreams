@@ -54,7 +54,10 @@ export const PhoneGrid: React.FC<PhoneProps> = (phoneProps) => {
             const clue = phoneProps.onCall(number);
             setNumber("555-");
            
-            const clueText =  `📩 ${clue.nameOfBoy} says: ${clue.message}`;
+            let clueText = `${clue.message}`;
+            if(clue.nameOfBoy)
+                clueText = `📩 ${clue.nameOfBoy} says: ${clue.message}`;
+                      
             setDisplay(clueText);
             let speakData = new SpeechSynthesisUtterance(clue.message);
             speakData.volume = 0.05; // From 0 to 1
