@@ -71,13 +71,6 @@ export const PhoneGrid: React.FC<PhoneProps> = (phoneProps) => {
             }
                       
             setDisplay(clueText);
-            
-            
-            
-            
-
-
-
             setIsPhoneNumber(false)
             setIsGuessing(false);
         }
@@ -120,8 +113,7 @@ export const PhoneGrid: React.FC<PhoneProps> = (phoneProps) => {
 
         const nameCalled: Name = BoyNameToEnum(e.target.value);        
         const number = phoneProps.getPhoneNumber(nameCalled);
-        
-        
+                
         if(isGuessing) {
             setDisplay(Name[nameCalled]);
         }
