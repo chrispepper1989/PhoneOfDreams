@@ -1,6 +1,7 @@
-﻿import {boys, EnumToStringArray, EnumToStringArrayWithout, Game} from "./game";
+﻿import {EnumToStringArray, EnumToStringArrayWithout, Game} from "./game";
 import {Name} from "./phoneNumbers";
 import {BoardLocation, Clothes, ClueTypes, Food, Sport} from "./clueEnums";
+import {boys} from "./boys";
 
 function getLastWord(str:string)
 {
@@ -24,14 +25,18 @@ describe(`enum helper functions`, () => {
     })
 });
 
-describe('Game gives right clues for specific boy ', () => {
+describe('Game gives right clues for specific boy: Adam ', () => {
     const game = new Game("123");
     const expectedBoy = Name.Adam
     game.setBoy(expectedBoy)
     
     it('has the correct defined boy', () => {
-        expect(game.chosenBoy).toBe( boys[expectedBoy]);
+        expect(game.crushBoy).toBe( boys[expectedBoy]);
     })
+    it("returns true when player guesses Adam", () =>
+    {
+        expect(game.guess("Adam")).toBe(true);
+    });
     it('the chosen boys location is not given as a doesnt clue and all other locations are given', () => {
         
         //exhaust location clues
@@ -111,7 +116,7 @@ describe('Game has Clues ', () =>
     const game = new Game("123");
     it('has a defined boy', () =>
     {
-        expect(game.chosenBoy).toBeDefined()
+        expect(game.crushBoy).toBeDefined()
     });
     it('has relevant clues', () => {        
         const clue = game.getClueFromBoy(Name.John);

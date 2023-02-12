@@ -23,7 +23,7 @@ function App() {
     const [clueLength, setClueLength] = useState<number>(0);
     const latestClue = clues ? clues[clues.length - 1] : undefined;
 
-    function newClue(nameCalled: Name ) {
+    function newClue(nameCalled: Name ):string {
         
         console.log("Clue From:")
         console.log(nameCalled);
@@ -34,25 +34,27 @@ function App() {
         currentClues?.push(clue);
         setClueLength(currentClues.length);
         setClues(currentClues);
+        return clue;
        
-    }
-  
-    
+    }    
     
 
-    function handlePhoneCall(number:string) {
+    function handlePhoneCall(number:string):string {
         const boy = game.phone(number);
-        newClue(boy);
+        if(boy) {
+            const clue = newClue(boy);
+            const boyName = Name[boy]
+            return `${boyName} says: ${clue}`;
+        }
+        return "Sorry wrong number";
     }
 
     return (
         <div className="App">
           
-            <center><h1>DreamPhone</h1></center>
+            <center><h1>Phone Of Dreams</h1></center>            
+            <Phone onCall={handlePhoneCall} display={latestClue} getPhoneNumber={game.getPhoneNumber} onGuess={(guess) => game.guess(guess)}></Phone>
             {Clues(clues)}
-            <Phone game={game} onCall={handlePhoneCall} display={latestClue}></Phone>           
-           
-          
         </div>
 
     );

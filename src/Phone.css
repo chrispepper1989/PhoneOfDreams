@@ -1,6 +1,6 @@
 ﻿body {
     font-family: sans-serif;
-    color: #333;
+    color: #061a06;
    
     text-align: center;
 }
@@ -52,30 +52,38 @@ a:hover {
 a:active {
     transform: translateY(5px);
 }
-
+.speedDial
+{
+    margin-bottom: 10px;
+}
 .screen
 {
+    border-radius: 10px;
     box-sizing: border-box;
     background-color: darkgreen;
     width: 85%;
-    margin:auto;
-    margin-top: 25px;
+
+    margin:20px;
+    
     border: solid black 3px;
-    padding: 5px; 
+    padding: 10px; 
     height: 150px;
+    font-size:  large;
+    
 }
 
 input {
-   
+    font-size:  xxx-large;
     font-smooth: never;
     -webkit-font-smoothing : none;
     overflow-wrap: break-word;
     background: transparent;
-    opacity: 60;
+    
     width: 90%;
     border: 0;
     outline: none;
     
     margin: 25px 0;
     text-align: center;
+    color: inherit;
 }
