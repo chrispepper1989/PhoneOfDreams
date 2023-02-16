@@ -188,8 +188,9 @@ button:active {
     flex-direction: column;
     flex-wrap: wrap;
     justify-content: center;
-    height: 80%;
-    margin-top: 10%;
+    height: 90%;
+    margin-top: 10px;
+   
     border-radius: 10px;
     box-sizing: border-box;
     background-color: var(--screen-color);
