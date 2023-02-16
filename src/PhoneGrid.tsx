@@ -216,8 +216,8 @@ export const PhoneGrid: React.FC<PhoneProps> = (phoneProps) => {
                        
                       
                     </div>
-                    <div className="end"><button onClick={() => handleClearClick()}>✆</button></div>
-                    <div className="call"><button onClick={() => handleCallButton(phoneNumber)}>✆</button></div>
+                    <div className="end"><button onClick={() => handleClearClick()}>☎</button></div>
+                    <div className="call"><button onClick={() => handleCallButton(phoneNumber)}>☎</button></div>
                 </div>
                 
             </div>
