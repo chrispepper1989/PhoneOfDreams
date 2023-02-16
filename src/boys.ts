@@ -1,5 +1,5 @@
-﻿import {Name} from "./phoneNumbers";
-import {BoardLocation, Clothes, Food, Sport} from "./clueEnums";
+﻿import {BoardLocation, Clothes, Food, Sport} from "./clueEnums";
+import {Name} from "./boyNames";
 export type TBoy = {
     location: BoardLocation,
     sport?: Sport,

@@ -1,7 +1,8 @@
 ﻿import Rand from 'rand-seed';
-import {Name, phoneNumbers} from "./phoneNumbers";
+import {phoneNumbers} from "./phoneNumbers";
 import {BoardLocation, Clothes, ClueTypes, Food, Sport} from "./clueEnums";
 import {boys, type TBoy} from "./boys";
+import {Name} from "./boyNames";
 
 
 export function BoyNameToEnum(name:string):Name

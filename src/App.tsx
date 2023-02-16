@@ -2,9 +2,9 @@ import React, {useEffect, useState} from 'react';
 import './App.css';
 import {Game} from "./game";
 
-import {Name} from "./phoneNumbers";
 import {PhoneClue, PhoneGrid} from "./PhoneGrid";
 import {Helmet} from "react-helmet";
+import {Name} from "./boyNames";
 
 
 function App() {

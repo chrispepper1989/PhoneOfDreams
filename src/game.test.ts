@@ -1,7 +1,7 @@
 ﻿import {EnumToStringArray, EnumToStringArrayWithout, Game} from "./game";
-import {Name} from "./phoneNumbers";
 import {BoardLocation, Clothes, ClueTypes, Food, Sport} from "./clueEnums";
 import {boys} from "./boys";
+import {Name} from "./boyNames";
 
 function getLastWord(str:string)
 {
