@@ -198,7 +198,7 @@ export const PhoneGrid: React.FC<PhoneProps> = (phoneProps) => {
                     <div className="speedDial speaker">                      
                         
                         <select id="dropdown" value={nameSelected} onChange={handleSpeedDialChange}>
-                            <option key={9999} value={FakeBoy} disabled={true}>Please Select Speed Dial</option>
+                            <option key={9999} value={FakeBoy} disabled={true}>Speed Dial</option>
                           
                             {names.map((x: Name) => <option key={Name[x]} value={Name[x]}>{Name[x]}</option>)}
                         </select>
