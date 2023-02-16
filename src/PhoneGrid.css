@@ -13,8 +13,7 @@ body {
     
     text-align: center;
     text-transform: uppercase;
-    border-style: inset;
-    
+     
 }
 
 /* new grid */
@@ -96,17 +95,28 @@ div:after {
 .Screen { grid-area: Screen; }
 
 .speed-dial { grid-area: speed-dial; width: 100%; }
-input, label {
-    display:block;
-    width: 100%;
-}
+
 select
 {
-    
-    width: 98%;
+    text-align: center;
+    width: 94%;
     height: 50%;
 }
-
+.speaker input[type='checkbox'] + label:before {
+    font-size: x-large;
+    content:"🔈";
+}
+.speaker input[type='checkbox']:checked + label:before {
+    font-size: x-large;
+    content:"🔊";
+}
+.speaker input[type='checkbox'] {
+    
+    display:none !important;
+}
+label {
+    cursor:pointer;
+}
 
 .end { 
     grid-area: end;
@@ -118,17 +128,26 @@ select
     
 }
 .call button{
+    font-size: xx-large;
+    background   : var(--button-color);
+    color: var(--call-button);
+    float: left;
+    max-height: 80%;
    
-    background   : var(--call-button);
-    color: #fff;
 }
+.call hr
+{color: var(--call-button);}
 
 .end button{
-    
-    background: var(--clear-button);
-    color: #fff;
+    font-size: xx-large;
+    background: var(--button-color);
+    color: var(--clear-button);
+    max-height: 80%;
+  
+    float: right;
 }
-
+.end hr
+{color: var(--clear-button);}
 
 .star { grid-area: star; }
 
@@ -170,7 +189,7 @@ button:active {
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    font-size: large;    
+    font-size: xx-large;    
     border-radius: 10px;
     box-sizing: border-box;
     background-color: var(--screen-color);
