@@ -193,7 +193,7 @@ export const PhoneGrid: React.FC<PhoneProps> = (phoneProps) => {
                     {[...Array(9)].map((x, i) =>                        
                         <div className={`button-${i+1} phone-button`}><button onClick={() => handleButtonClick(`${i+1}`)}  >{i+1}</button></div>
                     )}
-                    <div className="star phone-button"><button      onClick={() => handleInfoButton()}>🛈</button></div>
+                    <div className="star phone-button"><button      onClick={() => handleInfoButton()}>i</button></div>
                     <div className="guess phone-button"><button     onClick={() => handleGuessButton()}>❔</button></div>
                     <div className="button-0 phone-button"><button  onClick={() => handleButtonClick(`0`)}>0</button></div>
                 </div>
