@@ -180,11 +180,11 @@ export const PhoneGrid: React.FC<PhoneProps> = (phoneProps) => {
             <div className="container">
                 <div className="buttons">
                     {[...Array(9)].map((x, i) =>                        
-                        <div className={`button-${i+1}`}><button onClick={() => handleButtonClick(`${i+1}`)}  >{i+1}</button></div>
+                        <div className={`button-${i+1} phone-button`}><button onClick={() => handleButtonClick(`${i+1}`)}  >{i+1}</button></div>
                     )}
-                    <div className="star"><button      onClick={() => handleGuessButton()}>*</button></div>
-                    <div className="guess"><button     onClick={() => handleGuessButton()}>#</button></div>
-                    <div className="button-0"><button  onClick={() => handleButtonClick(`0`)}>0</button></div>
+                    <div className="star phone-button"><button      onClick={() => handleGuessButton()}>*</button></div>
+                    <div className="guess phone-button"><button     onClick={() => handleGuessButton()}>Guess</button></div>
+                    <div className="button-0 phone-button"><button  onClick={() => handleButtonClick(`0`)}>0</button></div>
                 </div>
                 <div className="screen">
                     <div className="Screen display">
