@@ -1,9 +1,16 @@
 # PhoneOfDreams
 A homage to a certain 90s classic
-Th
 
-## Available Scripts
+## How To Play
+You will need a copy of the boardgame "DreamPhone" this little app just takes the place of the toy handset that used to come with the game, just incase like us, your handset has sadly broken.
 
+## It doesnt work on my edition
+More editions coming soon! please raise an "issue" and let me know about your edition!
+
+## Can I play without the board game
+Sadly not, you would have to have cards that match the right [phone numbers](src/phoneNumbers.ts) and clue sheets that match [the boys](src/boys.ts)
+
+## How To Run code
 In the project directory, you can run:
 
 ### `npm start`
