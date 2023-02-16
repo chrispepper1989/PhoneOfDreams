@@ -34,6 +34,7 @@ export const PhoneGrid: React.FC<PhoneProps> = (phoneProps) => {
     const [isGuessing, setIsGuessing] = useState(false);
     const [input, setInput] = useState("");
     const [guess, setGuess] = useState("none");
+    const [isHowToPlay, setIsHowToPlay] = useState(false);
     const [display, setDisplay] = useState(phoneProps.display ?? "555-");
     const names = EnumToNumberArray(Name);
     const [nameSelected, setNameSelected] = useState<string>(FakeBoy);
@@ -123,6 +124,7 @@ export const PhoneGrid: React.FC<PhoneProps> = (phoneProps) => {
         setPhoneNumber(number);
         setIsPhoneNumber(true)
         setDisplay(number)
+        setIsHowToPlay(false);
         console.log("display is " + number );
     }
 
@@ -131,6 +133,7 @@ export const PhoneGrid: React.FC<PhoneProps> = (phoneProps) => {
         setNumber("555-");
         setLastClue(undefined)
         setNameSelected(FakeBoy);
+        setIsHowToPlay(false);
     }
 
     function handleButtonClick(number: string) {
@@ -176,19 +179,27 @@ export const PhoneGrid: React.FC<PhoneProps> = (phoneProps) => {
         }
     }
 
-        return (
+    function handleInfoButton() {
+        setIsHowToPlay(true);
+        setDisplay("");
+        setIsPhoneNumber(false)
+        setIsGuessing(false)
+    }
+
+    return (
 
             <div className="container">
                 <div className="buttons">
                     {[...Array(9)].map((x, i) =>                        
                         <div className={`button-${i+1} phone-button`}><button onClick={() => handleButtonClick(`${i+1}`)}  >{i+1}</button></div>
                     )}
-                    <div className="star phone-button"><button      onClick={() => handleGuessButton()}>*</button></div>
-                    <div className="guess phone-button"><button     onClick={() => handleGuessButton()}>Guess</button></div>
+                    <div className="star phone-button"><button      onClick={() => handleInfoButton()}>🛈</button></div>
+                    <div className="guess phone-button"><button     onClick={() => handleGuessButton()}>❔</button></div>
                     <div className="button-0 phone-button"><button  onClick={() => handleButtonClick(`0`)}>0</button></div>
                 </div>
                 <div className="screen">
                     <div className="Screen display">
+                        {isHowToPlay && !isGuessing  ? <a href='https://github.com/chrispepper1989/PhoneOfDreams#readme'> How To Play </a>: null}
                         {isPhoneNumber || isGuessing?
                             <input value={input} onChange={handleInputChange}/>
                             :
