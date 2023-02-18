@@ -8,7 +8,11 @@
     --call-button: #34c86b;
     --clear-button: #d73b48;
 }
-
+@media screen and (max-device-width: 690px){
+  body{
+    -webkit-text-size-adjust: none;
+  }
+}
 body { 
     
     text-align: center;
