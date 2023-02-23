@@ -14,7 +14,7 @@
   }
 }
 body { 
-    
+    -webkit-text-size-adjust: none;
     text-align: center;
     text-transform: uppercase;
      
