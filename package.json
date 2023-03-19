@@ -12,6 +12,8 @@
     "@types/react-dom": "^18.0.10",
     "rand-seed": "^1.0.2",
     "react": "^18.2.0",
+    "react-beforeunload": "^2.5.3",
+    "react-confirm-alert": "^3.0.6",
     "react-dom": "^18.2.0",
     "react-helmet": "^6.1.0",
     "react-kofi-button": "^0.7.1",

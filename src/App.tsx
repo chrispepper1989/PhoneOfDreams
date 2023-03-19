@@ -10,23 +10,50 @@ import {Name} from "./boyNames";
 function App() {
     const seedKey = "seedkey";
   
-    //const [game, setGame] = useState<Game>(new Game(seed));
-    const [seed,setSeed]= useState<string>("123");
-    const  game = new Game(seed);
+    const [seed,setSeed]= useState<string>("123456");
+    const [gameStarted, setGameStarted] = useState<boolean>(false);
+    const [showModal, setShowModal] = useState<boolean>(false);
+    let game:Game = new Game(seed);
 
+
+    useEffect(() => {
+        function alertUser(ev:any) {
+            ev.preventDefault();
+            return ev.returnValue = 'Are you sure you want to close?';
+        }
+
+        window.addEventListener('beforeunload', alertUser)        
+       
+        return () => {
+            window.removeEventListener('beforeunload', alertUser)            
+        }
+    })
+    function setGame(seed:string)
+    {
+        setGameStarted(true);
+        localStorage.setItem(seedKey, seed);
+        setSeed(seed);
+        game = new Game(seed);
+    }
     function newGame()
     {
-        const newSeed = crypto.randomUUID();
-        console.log("save seed is " +newSeed)        
-        localStorage.setItem(seedKey, seed);
-        setSeed(newSeed);
+        const maxNumber =   9999;
+        const maxPadding = "0000";
+        
+        const number = (Math.floor(Math.random()*maxNumber)).toString()
+        console.log(number);
+        // crypto.randomUUID(); (alternate)
+        const newSeed =  maxPadding.substring(number.length) + number;
+       
+        console.log("save seed is " +newSeed)
+        setGame(newSeed);
     }
     function loadGame()
     {
         let loadSeed = localStorage.getItem(seedKey) ;
         console.log("load seed is " + loadSeed)
-        if(loadSeed) {         
-            setSeed(loadSeed);
+        if(loadSeed) {
+            setGame(loadSeed);
         }
         else 
             newGame();
@@ -39,7 +66,11 @@ function App() {
     
     const display = "Phone Of Dreams";    
     
+   
+    
     function newClue(nameCalled: Name ):string {      
+        
+        if(!gameStarted) return "Bad Game State";
         
         const clue= game.getClueFromBoy(nameCalled);
         console.log("Clue From:")
@@ -51,6 +82,8 @@ function App() {
     }        
 
     function handlePhoneCall(number:string):PhoneClue {
+        if(!gameStarted) return {message:"Bad Game State"};
+        
         const boy = game.phone(number);
         if(boy) {
             const clue = newClue(boy);
@@ -68,6 +101,9 @@ function App() {
         "    'floating-chat.donateButton.text-color': '#323842'\n" +
         "  });\n";
 
+    if(!gameStarted){return <div>bad game state</div>}
+
+    
 
     return (
         <>
@@ -83,12 +119,22 @@ function App() {
         </Helmet>
 
         </head> 
-        <div className="App">
-                                
-            <PhoneGrid onCall={handlePhoneCall} display={display} getPhoneNumber={game.getPhoneNumber} onGuess={(name) => game.guessFromName(name)}></PhoneGrid>
-            
-        </div>
-           <button onClick={() => newGame()} > Playing Seed {seed}, Click for New Game</button>
+                 
+            {showModal ? <dialog open className='app add-dialog'>
+                <h2>Wait</h2>
+                <p>Are You Sure you want to make a new game</p>
+                    <div className="flex flex-space-between">
+                <button onClick={() => setShowModal(false)}>No</button>
+                <br/>
+                <button className="cta" onClick={() => {setShowModal(false); newGame()} }>Yes: New Game</button>
+                    </div>
+            </dialog> :
+
+                <div className="App">
+                    <PhoneGrid onCall={handlePhoneCall} display={display} getPhoneNumber={game.getPhoneNumber} onGuess={(name) => game.guessFromName(name)}></PhoneGrid>
+                    <button onClick={() => setShowModal(true)} > Playing Seed {seed}, Click for New Game</button>
+                </div>
+               }
         </>
     );
 }
