@@ -12,7 +12,9 @@ function App() {
   
     const [seed,setSeed]= useState<string>("123456");
     const [gameStarted, setGameStarted] = useState<boolean>(false);
-    const [showModal, setShowModal] = useState<boolean>(false);
+    const [showSureModal, setShowSureModal] = useState<boolean>(false);
+    const [showSetModal, setShowSetModal] = useState<boolean>(false);
+    const [input, setInput] = useState('');
     let game:Game = new Game(seed);
 
 
@@ -33,6 +35,7 @@ function App() {
         setGameStarted(true);
         localStorage.setItem(seedKey, seed);
         setSeed(seed);
+        setInput(seed);
         game = new Game(seed);
     }
     function newGame()
@@ -118,24 +121,36 @@ function App() {
  
         </Helmet>
 
-        </head> 
-                 
-            {showModal ? <dialog open className='app add-dialog'>
+        </head>
+            { showSetModal ?
+                <dialog open className='app add-dialog'>
+                <h2>Set Seed</h2>
+                
+                <div className="flex flex-space-between">
+                 <input value={input} onInput={e => setInput(e.currentTarget.value)}/>
+           
+                <br/>
+                <button className="cta" onClick={() => {setShowSetModal(false); setGame(input)} }>Set Seed</button>
+                </div>
+                </dialog>
+                :
+             showSureModal ? <dialog open className='app add-dialog'>
                 <h2>Wait</h2>
                 <p>Are You Sure you want to make a new game</p>
                     <div className="flex flex-space-between">
-                <button onClick={() => setShowModal(false)}>No</button>
+                <button onClick={() => setShowSureModal(false)}>No</button>
                 <br/>
-                <button className="cta" onClick={() => {setShowModal(false); newGame()} }>Yes: New Game</button>
+                <button className="cta" onClick={() => {setShowSureModal(false); newGame()} }>Yes: New Game</button>
                     </div>
             </dialog> :
 
                 <div className="App">
                     <PhoneGrid onCall={handlePhoneCall} display={display} getPhoneNumber={game.getPhoneNumber} onGuess={(name) => game.guessFromName(name)}></PhoneGrid>
-                    <button onClick={() => setShowModal(true)} > Playing Seed {seed}, Click for New Game</button>
+                    <button onClick={() => setShowSureModal(true)} > Playing Seed {seed}, Click for New Game</button>
+                    <button onClick={() => setShowSetModal(true)} > Click to set seed</button>
                 </div>
                }
-        </>
+        </> 
     );
 }
 
