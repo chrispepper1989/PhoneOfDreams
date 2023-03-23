@@ -14,7 +14,6 @@ function App() {
     const [seed,setSeed]= useState<string>("123456");
     const [gameStarted, setGameStarted] = useState<boolean>(false);
     const [showSureModal, setShowSureModal] = useState<boolean>(false);
-    const [showSetModal, setShowSetModal] = useState<boolean>(false);
     const [showLog, setShowLog] = useState<boolean>(false);
     const [showAnswer, setShowAnswer] = useState<boolean>(false);
     const [boysRang, setBoysRang] = useState<Name[]>([]);
@@ -55,6 +54,7 @@ function App() {
             boysRangBefore.forEach( (boy) => game.getClueFromBoy(boy));
         }
         setBoysRang(boysRangBefore ?? []);
+        localStorage.setItem(boysRangKey, JSON.stringify(boysRang));
             
     }
     function newGame()

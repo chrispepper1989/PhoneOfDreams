@@ -94,19 +94,19 @@ export class Game {
     
     getLocationClue():string
     {        
-        return `He doesnt hang out at the ${this.getEnumClue(BoardLocation, ClueTypes.BoardLocation, this._crushBoy.location)}`;
+        return `he doesnt hang out at the ${this.getEnumClue(BoardLocation, ClueTypes.BoardLocation, this._crushBoy.location)}`;
     }
     getSportClue():string
     {      
-        return `He is not interested in ${this.getEnumClue(Sport, ClueTypes.Sport, this._crushBoy.sport)}`;
+        return `he is not interested in ${this.getEnumClue(Sport, ClueTypes.Sport, this._crushBoy.sport)}`;
     }
     getFoodClue():string
     {       
-        return `He doesnt eat ${this.getEnumClue(Food, ClueTypes.Food, this._crushBoy.food)}`;
+        return `he doesnt eat ${this.getEnumClue(Food, ClueTypes.Food, this._crushBoy.food)}`;
     }
     getClothesClue():string
     { 
-        return `He doesnt wear ${this.getEnumClue(Clothes,ClueTypes.Clothes,  this._crushBoy.wears)}`;
+        return `he doesnt wear ${this.getEnumClue(Clothes,ClueTypes.Clothes,  this._crushBoy.wears)}`;
     }
     
     getClueType(boyCalled:Name):ClueTypes
