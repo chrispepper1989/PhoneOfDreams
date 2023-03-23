@@ -19,6 +19,7 @@ export interface PhoneClue
 export interface PhoneProps {
     onCall: (number:string)=>PhoneClue
     onGuess: (name:string)=>boolean
+    showModal: () => void
     getPhoneNumber:(name:Name) => string
     display?:string,
 }
@@ -199,7 +200,11 @@ export const PhoneGrid: React.FC<PhoneProps> = (phoneProps) => {
                 </div>
                 <div className="screen">
                     <div className="Screen display">
-                        {isHowToPlay && !isGuessing  ? <a href='https://github.com/chrispepper1989/PhoneOfDreams#readme'> How To Play </a>: null}
+                        {isHowToPlay && !isGuessing  ? <> 
+                            <div className="info">
+                                <a href='https://github.com/chrispepper1989/PhoneOfDreams#readme'> How To Play </a>
+                                <button onClick={() => phoneProps.showModal()} > Click for New Game</button>
+                            <button onClick={() => phoneProps.showModal()} > Click to set seed</button></div></>: null}
                         {isPhoneNumber || isGuessing?
                             <input value={input} onChange={handleInputChange}/>
                             :

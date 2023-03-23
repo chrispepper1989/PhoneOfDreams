@@ -184,6 +184,29 @@ button:active {
     transform: translateY(1%);
 }
 
+.info
+{
+    height: 100%;
+    display: grid;   ;
+    grid-template-columns: 0.1fr 1fr 0.1fr;
+    grid-column-gap: 20px;
+    grid-row-gap: 20px;
+    justify-items: stretch;
+    align-items: stretch;
+}
+.info a {
+    grid-column-start: 2;
+    width: 100%;
+ 
+ 
+
+}
+.info button
+{
+    width: 100%;
+    grid-column-start: 2;
+  
+}
 
 
 .display

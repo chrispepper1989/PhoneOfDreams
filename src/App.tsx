@@ -175,18 +175,17 @@ function App() {
                 <button onClick={() => {setShowSureModal(false); setShowLog(false)}}>No</button>
                 <br/>
                 <button className="cta" onClick={() => {setShowSureModal(false); setShowLog(false); newGame()} }>Yes: New Game</button>                 
-               
+                 
                  <h2>Boys and clues so far</h2>                   
-                    
+                    <p>Playing Seed {seed}</p>
                      {showLog ? <><ol> {getBoysAndClues().map( (value, key) =>  <li key={key}>{value}</li>)}</ol> <button className="cta" onClick={() => setShowAnswer(!showAnswer)}>{!showAnswer ? "Show" : "Hide"} Answer</button></>: <button className="cta" onClick={() => setShowLog(true)}>Show Log</button>}
                         {showLog && showAnswer ? <p>{getAnswer()}</p> : null}   
                 </div>
             </dialog> :
 
                 <div className="App">
-                    <PhoneGrid onCall={handlePhoneCall} display={display} getPhoneNumber={game.getPhoneNumber} onGuess={(name) => game.guessFromName(name)}></PhoneGrid>
-                    <button onClick={() => setShowSureModal(true)} > Playing Seed {seed}, Click for New Game</button>
-                    <button onClick={() => setShowSetModal(true)} > Click to set seed</button>
+                    <PhoneGrid  showModal={ () =>  setShowSureModal(true)}  onCall={handlePhoneCall} display={display} getPhoneNumber={game.getPhoneNumber} onGuess={(name) => game.guessFromName(name)}></PhoneGrid>
+                    
                 </div>
                }
         </> 
