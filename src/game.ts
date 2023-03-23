@@ -77,21 +77,21 @@ export class Game {
     {
         const index = this.clueIndexes[clueType];
         const enumValues:any = boyValue ?  EnumToStringArrayWithout(theEnum,  boyValue) : EnumToStringArray(theEnum);     
-        const enumValueAsString = enumValues[index];
+        let enumValueAsString = enumValues[index];
 
         this.clueIndexes[clueType]++;
         if(this.clueIndexes[clueType] >= enumValues.length)
         {
             this.clueIndexes[clueType] = 0;
         }
-            
+        enumValueAsString = enumValueAsString.replace("_", " ");
         return enumValueAsString;
     }
     
     
     getLocationClue():string
     {        
-        return `He doesnt hang out at ${this.getEnumClue(BoardLocation, ClueTypes.BoardLocation, this._crushBoy.location)}`;
+        return `He doesnt hang out at the ${this.getEnumClue(BoardLocation, ClueTypes.BoardLocation, this._crushBoy.location)}`;
     }
     getSportClue():string
     {      

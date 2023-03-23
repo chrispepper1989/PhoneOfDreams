@@ -15,6 +15,7 @@ function App() {
     const [gameStarted, setGameStarted] = useState<boolean>(false);
     const [showSureModal, setShowSureModal] = useState<boolean>(false);
     const [showSetModal, setShowSetModal] = useState<boolean>(false);
+    const [showLog, setShowLog] = useState<boolean>(false);
     const [boysRang, setBoysRang] = useState<Name[]>([]);
     const [input, setInput] = useState('');
     let game:Game = new Game(seed);    
@@ -159,24 +160,22 @@ function App() {
                  <input value={input} onInput={e => setInput(e.currentTarget.value)}/>
                     
                 <br/>
-                <button className="cta" onClick={() => {setShowSetModal(false); setGame(input)} }>Set Seed</button>
+                <button className="cta" onClick={() => {setShowSetModal(false);  setGame(input)} }>Set Seed</button>
                 </div>
                 </dialog>
                 :
              showSureModal ? <dialog open className='app add-dialog'>
                 <h2>Wait</h2>
-                <p>Are You Sure you want to make a new game</p>
+                <p>Are you sure you want to make a new game?</p>
                     <div className="flex flex-space-between">
-                <button onClick={() => setShowSureModal(false)}>No</button>
+                <button onClick={() => {setShowSureModal(false); setShowLog(false)}}>No</button>
                 <br/>
-                <button className="cta" onClick={() => {setShowSureModal(false); newGame()} }>Yes: New Game</button>
-                    </div>
-                 <div>
-                     <h2>Boys and clues so far</h2>
-                     <ol>
-                         {getBoysAndClues().map( (value, key) =>  <li key={key}>{value}</li>)}
-                     </ol>
-                 </div>
+                <button className="cta" onClick={() => {setShowSureModal(false); setShowLog(false); newGame()} }>Yes: New Game</button>                 
+               
+                 <h2>Boys and clues so far</h2>                   
+                    
+                     {showLog ? <ol> {getBoysAndClues().map( (value, key) =>  <li key={key}>{value}</li>)}</ol> : <button className="cta" onClick={() => setShowLog(true)}>Show Log</button>}
+                </div>
             </dialog> :
 
                 <div className="App">

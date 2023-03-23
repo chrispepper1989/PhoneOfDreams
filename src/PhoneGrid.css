@@ -16,7 +16,7 @@
 body { 
     -webkit-text-size-adjust: none;
     text-align: center;
-    text-transform: uppercase;
+    
      
 }
 
@@ -188,6 +188,7 @@ button:active {
 
 .display
 {
+    text-transform:uppercase;
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;

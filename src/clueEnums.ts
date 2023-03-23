@@ -8,10 +8,10 @@
 
 export enum BoardLocation {
     Cinema,
-    HighSchool,
-    TownPark,
+    High_School,
+    Town_Park,
     Mall,
-    GamerLounge,
+    Gamer_Lounge,
     Beach,
 }
 
@@ -25,7 +25,7 @@ export enum Sport {
 }
 
 export enum Food {
-    IceCream,
+    Ice_Cream,
     Fruit,
     Chocolate,
     Burgers,
@@ -37,7 +37,7 @@ export enum Clothes {
     Jeans = 1,
     Sneakers = 2,
     Shades = 4,
-    Jacket = 8,
-    Hat = 16,
+    A_Jacket = 8,
+    A_Hat = 16,
     Orange = 32
 }
