@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import './App.css';
-import {EnumToStringArray, Game} from "./game";
+import { Game} from "./game";
 
 import {PhoneClue, PhoneGrid} from "./PhoneGrid";
 import {Helmet} from "react-helmet";
@@ -54,6 +54,7 @@ function App() {
         {
             boysRangBefore.forEach( (boy) => game.getClueFromBoy(boy));
         }
+        setBoysRang(boysRangBefore ?? []);
             
     }
     function newGame()
@@ -63,11 +64,10 @@ function App() {
         
         const number = (Math.floor(Math.random()*maxNumber)).toString()
         console.log(number);
-        // crypto.randomUUID(); (alternate)
         const newSeed =  maxPadding.substring(number.length) + number;
        
         console.log("save seed is " +newSeed)
-        setGame(newSeed);
+        setGame(newSeed);        
     }
     function loadGame()
     {
@@ -78,6 +78,7 @@ function App() {
             console.log(boysRangBefore);
             setBoysRang(boysRangBefore);
             setGame(loadSeed,boysRangBefore);
+            setShowSureModal(true);
         }
         else 
             newGame();
@@ -138,7 +139,7 @@ function App() {
         "    'floating-chat.donateButton.text-color': '#323842'\n" +
         "  });\n";
 
-    if(!gameStarted){return <div>bad game state</div>}
+    if(!gameStarted){return <div>Loading...</div>}
 
     
 
@@ -156,31 +157,33 @@ function App() {
         </Helmet>
 
         </head>
-            { showSetModal ?
-                <dialog open className='app add-dialog'>
-                <h2>Set Seed</h2>
-                
-                <div className="flex flex-space-between">
-                 <input value={input} onInput={e => setInput(e.currentTarget.value)}/>
-                    
-                <br/>
-                <button className="cta" onClick={() => {setShowSetModal(false);  setGame(input)} }>Set Seed</button>
-                </div>
-                </dialog>
-                :
+            { 
              showSureModal ? <dialog open className='app add-dialog'>
-                <h2>Wait</h2>
-                <p>Are you sure you want to make a new game?</p>
+                <h2>Game Settings</h2>
+                <p>Your loaded game is {seed}</p>
                     <div className="flex flex-space-between">
-                <button onClick={() => {setShowSureModal(false); setShowLog(false)}}>No</button>
+                <button className="cta" onClick={() => {setShowSureModal(false); setShowLog(false)}}>Show Phone</button>
                 <br/>
-                <button className="cta" onClick={() => {setShowSureModal(false); setShowLog(false); newGame()} }>Yes: New Game</button>                 
-                 
-                 <h2>Boys and clues so far</h2>                   
-                    <p>Playing Seed {seed}</p>
-                     {showLog ? <><ol> {getBoysAndClues().map( (value, key) =>  <li key={key}>{value}</li>)}</ol> <button className="cta" onClick={() => setShowAnswer(!showAnswer)}>{!showAnswer ? "Show" : "Hide"} Answer</button></>: <button className="cta" onClick={() => setShowLog(true)}>Show Log</button>}
-                        {showLog && showAnswer ? <p>{getAnswer()}</p> : null}   
+                <h2>Start New Game</h2>
+                <button  onClick={() => {setShowSureModal(false); setShowLog(false); newGame()} }>Yes</button>
+
+                <h2>Set Seed Here:</h2>
+
+                <div className="flex flex-space-between">
+                    <input value={input} onInput={e => setInput(e.currentTarget.value)}/>
+
+                    <br/>
+                    <button  onClick={() => {setGame(input)} }>Set Seed</button>
                 </div>
+                
+                 <h2>Boys and clues so far:</h2>                   
+                    
+                     {showLog ? <><ol> {getBoysAndClues().map( (value, key) =>  <li key={key}>{value}</li>)}</ol> <button className="cta" onClick={() => setShowAnswer(!showAnswer)}>{!showAnswer ? "Show" : "Hide"} Answer</button></>: <button  onClick={() => setShowLog(true)}>Show Log</button>}
+                        {showLog && showAnswer ? <p>{getAnswer()}</p> : null}
+
+                      
+                </div>
+                    
             </dialog> :
 
                 <div className="App">

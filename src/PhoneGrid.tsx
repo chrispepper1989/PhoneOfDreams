@@ -203,8 +203,8 @@ export const PhoneGrid: React.FC<PhoneProps> = (phoneProps) => {
                         {isHowToPlay && !isGuessing  ? <> 
                             <div className="info">
                                 <a href='https://github.com/chrispepper1989/PhoneOfDreams#readme'> How To Play </a>
-                                <button onClick={() => phoneProps.showModal()} > Click for New Game</button>
-                            <button onClick={() => phoneProps.showModal()} > Click to set seed</button></div></>: null}
+                                <button onClick={() => phoneProps.showModal()} > Click for Game Menu</button>
+                            </div></>: null}
                         {isPhoneNumber || isGuessing?
                             <input value={input} onChange={handleInputChange}/>
                             :
