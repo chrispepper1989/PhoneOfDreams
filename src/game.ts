@@ -42,15 +42,17 @@ export function EnumToNumberArray(anEnum:any):number[] {
 const numberOfBoys = Object.keys(boys).length;
 
 export class Game {
+
     setBoy(value: Name) {
         this._crushBoy = boys[value];
+        this._crushBoyName = value;
     }
 
     get crushBoy(): TBoy {
         return this._crushBoy;
     }
     private _crushBoy: TBoy;
-    
+    private _crushBoyName: Name;
 
     clueIndexes: Record<ClueTypes, number> =
         {
@@ -69,6 +71,7 @@ export class Game {
         this.rand = new Rand(seed);
         const chosenBoyIndex = this.RandInt(numberOfBoys) as Name;
         this._crushBoy = boys[chosenBoyIndex];
+        this._crushBoyName = chosenBoyIndex;
         this.setBoy(chosenBoyIndex);
 
     }
@@ -193,17 +196,15 @@ export class Game {
         return this.guessBoy(boyNameGuessed);
 
     }
+    getAnswer():string
+    {    
+        const boyName = this._crushBoyName;    
+       
+        return `${Name[boyName]}`;
+    }
 
      guessBoy(boyNameGuessed: Name) {
-        const boyGuessed = boys[boyNameGuessed]
-        console.log("Answer is:")
-        console.log(this.crushBoy);
-        const boyName = (Object.keys(boys)).find((key) =>
-            boys[BoyNameToEnum(key)] == this.crushBoy
-        ) ?? "???";
-
-
-        console.log("boys name is " + boyName);
+        const boyGuessed = boys[boyNameGuessed]       
 
         return this.crushBoy === boyGuessed;
     }

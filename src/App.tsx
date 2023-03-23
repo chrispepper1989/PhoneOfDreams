@@ -16,6 +16,7 @@ function App() {
     const [showSureModal, setShowSureModal] = useState<boolean>(false);
     const [showSetModal, setShowSetModal] = useState<boolean>(false);
     const [showLog, setShowLog] = useState<boolean>(false);
+    const [showAnswer, setShowAnswer] = useState<boolean>(false);
     const [boysRang, setBoysRang] = useState<Name[]>([]);
     const [input, setInput] = useState('');
     let game:Game = new Game(seed);    
@@ -87,9 +88,12 @@ function App() {
         loadGame(); 
     },[]);
     
-    const display = "Phone Of Dreams";    
-    
-   
+    const display = "Phone Of Dreams";
+
+    function getAnswer(): string
+    {
+        return game.getAnswer();
+    }
     
     function newClue(nameCalled: Name ):string {      
         
@@ -174,7 +178,8 @@ function App() {
                
                  <h2>Boys and clues so far</h2>                   
                     
-                     {showLog ? <ol> {getBoysAndClues().map( (value, key) =>  <li key={key}>{value}</li>)}</ol> : <button className="cta" onClick={() => setShowLog(true)}>Show Log</button>}
+                     {showLog ? <><ol> {getBoysAndClues().map( (value, key) =>  <li key={key}>{value}</li>)}</ol> <button className="cta" onClick={() => setShowAnswer(!showAnswer)}>{!showAnswer ? "Show" : "Hide"} Answer</button></>: <button className="cta" onClick={() => setShowLog(true)}>Show Log</button>}
+                        {showLog && showAnswer ? <p>{getAnswer()}</p> : null}   
                 </div>
             </dialog> :
 
