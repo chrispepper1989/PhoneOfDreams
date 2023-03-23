@@ -58,7 +58,7 @@ export const PhoneGrid: React.FC<PhoneProps> = (phoneProps) => {
     
     function handleCallButton(number: string) {
         function handleGuess() {
-            playMessage();
+           
             setGuess(input);
             const correct = phoneProps.onGuess(input);
            
@@ -67,6 +67,7 @@ export const PhoneGrid: React.FC<PhoneProps> = (phoneProps) => {
             
             if(correct)
             {
+                playMessage();
                 speakMessage("yes, I like you!");
             }
             else

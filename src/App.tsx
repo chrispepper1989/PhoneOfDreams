@@ -14,6 +14,7 @@ function App() {
     const [seed,setSeed]= useState<string>("123456");
     const [gameStarted, setGameStarted] = useState<boolean>(false);
     const [showSureModal, setShowSureModal] = useState<boolean>(false);
+    const [showDebug, setShowDebug] = useState<boolean>(false);
     const [showLog, setShowLog] = useState<boolean>(false);
     const [showAnswer, setShowAnswer] = useState<boolean>(false);
     const [boysRang, setBoysRang] = useState<Name[]>([]);
@@ -159,15 +160,17 @@ function App() {
         </head>
             { 
              showSureModal ? <dialog open className='app add-dialog'>
-                <h2>Game Settings</h2>
+                <h2>Phone Of Dreams</h2>
                 <p>Your loaded game is {seed}</p>
                     <div className="flex flex-space-between">
-                <button className="cta" onClick={() => {setShowSureModal(false); setShowLog(false)}}>Show Phone</button>
+                <button className="cta" onClick={() => {setShowSureModal(false); setShowLog(false)}}>Resume</button>
                 <br/>
-                <h2>Start New Game</h2>
-                <button  onClick={() => {setShowSureModal(false); setShowLog(false); newGame()} }>Yes</button>
-
-                <h2>Set Seed Here:</h2>
+                
+                <button  onClick={() => {setShowSureModal(false); setShowLog(false); newGame()} }>New Game</button>
+                        <br/>
+                        <button  onClick={() => setShowDebug(!showDebug)}>{!showDebug ? "Show" : "Hide"} Advanced</button>
+                        {showDebug? (<div>
+                <h3>Set Load Code Here:</h3>
 
                 <div className="flex flex-space-between">
                     <input value={input} onInput={e => setInput(e.currentTarget.value)}/>
@@ -176,10 +179,14 @@ function App() {
                     <button  onClick={() => {setGame(input)} }>Set Seed</button>
                 </div>
                 
-                 <h2>Boys and clues so far:</h2>                   
+                 <h3>Boys and clues so far:</h3>                   
                     
-                     {showLog ? <><ol> {getBoysAndClues().map( (value, key) =>  <li key={key}>{value}</li>)}</ol> <button className="cta" onClick={() => setShowAnswer(!showAnswer)}>{!showAnswer ? "Show" : "Hide"} Answer</button></>: <button  onClick={() => setShowLog(true)}>Show Log</button>}
-                        {showLog && showAnswer ? <p>{getAnswer()}</p> : null}
+                     {showLog ? <><ol> {getBoysAndClues().map( (value, key) =>  
+                         <li key={key}>{value}</li>)}</ol>
+                             <button className="cta" onClick={() => setShowAnswer(!showAnswer)}>{!showAnswer ? "Show" : "Hide"} Answer</button>
+                         </>
+                         : <button  onClick={() => setShowLog(true)}>Show Log</button>}
+                        {showLog && showAnswer ? <p>{getAnswer()}</p> : null} </div>) : null}
 
                       
                 </div>
