@@ -19,9 +19,8 @@ function App() {
     const [showAnswer, setShowAnswer] = useState<boolean>(false);
     const [boysRang, setBoysRang] = useState<Name[]>([]);
     const [input, setInput] = useState('');
-    let game:Game = new Game(seed);    
-    
-    
+    const [game, setGameState] = useState(new Game(seed));
+
     function updateBoysRang(boy:Name)
     {
         if(!boy)
@@ -44,14 +43,16 @@ function App() {
             window.removeEventListener('beforeunload', alertUser)            
         }
     })
-    function setGame(seed: string, boysRangBefore?: Name[]) {
+    function restartGame(seed: string, boysRangBefore?: Name[]) {
         setGameStarted(true);
+        setGameState(new Game(seed))
         localStorage.setItem(seedKey, seed);
         setSeed(seed);
         setInput(seed);
-        game = new Game(seed);
+      
         if(boysRangBefore)
         {
+            //replay game state
             boysRangBefore.forEach( (boy) => game.getClueFromBoy(boy));
         }
         setBoysRang(boysRangBefore ?? []);
@@ -68,7 +69,7 @@ function App() {
         const newSeed =  maxPadding.substring(number.length) + number;
        
         console.log("save seed is " +newSeed)
-        setGame(newSeed);        
+        restartGame(newSeed);        
     }
     function loadGame()
     {
@@ -78,7 +79,7 @@ function App() {
             const boysRangBefore:Name[] = JSON.parse(localStorage.getItem(boysRangKey) || '[]') as Name[];
             console.log(boysRangBefore);
             setBoysRang(boysRangBefore);
-            setGame(loadSeed,boysRangBefore);
+            restartGame(loadSeed,boysRangBefore);
             setShowSureModal(true);
         }
         else 
@@ -176,7 +177,7 @@ function App() {
                     <input value={input} onInput={e => setInput(e.currentTarget.value)}/>
 
                     <br/>
-                    <button  onClick={() => {setGame(input)} }>Set Seed</button>
+                    <button  onClick={() => {restartGame(input)} }>Set Seed</button>
                 </div>
                 
                  <h3>Boys and clues so far:</h3>                   
