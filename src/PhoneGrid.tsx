@@ -35,7 +35,7 @@ export const PhoneGrid: React.FC<PhoneProps> = (phoneProps) => {
     const [isGuessing, setIsGuessing] = useState(false);
     const [input, setInput] = useState("");
     const [guess, setGuess] = useState("none");
-    const [isHowToPlay, setIsHowToPlay] = useState(false);
+    const [isHowToPlay, setIsHowToPlay] = useState(true);
     const [display, setDisplay] = useState(phoneProps.display ?? "555-");
     const names = EnumToNumberArray(Name);
     const [nameSelected, setNameSelected] = useState<string>(FakeBoy);
@@ -146,10 +146,10 @@ export const PhoneGrid: React.FC<PhoneProps> = (phoneProps) => {
     }
 
     function handleGuessButton() {
-        playClick();
-        setDisplay("Guessing");
-        setInput("Guess")
-        setIsGuessing(true);
+        playClick();        
+        setInput("Dial Your Guess")
+        setIsGuessing(!isGuessing);
+        setIsHowToPlay(false);
     }   
     
     const handleSpeedDialChange = (e: any) => {
@@ -182,7 +182,8 @@ export const PhoneGrid: React.FC<PhoneProps> = (phoneProps) => {
     }
 
     function handleInfoButton() {
-        setIsHowToPlay(true);
+        
+        setIsHowToPlay(!isHowToPlay);
         setDisplay("");
         setIsPhoneNumber(false)
         setIsGuessing(false)
@@ -203,8 +204,10 @@ export const PhoneGrid: React.FC<PhoneProps> = (phoneProps) => {
                     <div className="Screen display">
                         {isHowToPlay && !isGuessing  ? <> 
                             <div className="info">
-                                <a href='https://github.com/chrispepper1989/PhoneOfDreams#readme'> How To Play </a>
+                                <a href='https://github.com/chrispepper1989/PhoneOfDreams#readme'> How To Play </a>                               
                                 <button onClick={() => phoneProps.showModal()} > Click for Game Menu</button>
+                                <button onClick={()=>{ document.fullscreenElement ? document.exitFullscreen() : document.body.requestFullscreen();}}>Toggle Full Screen</button>
+                                <button onClick={()=>{setIsHowToPlay(false);}}>Close Info</button>
                             </div></>: null}
                         {isPhoneNumber || isGuessing?
                             <input value={input} onChange={handleInputChange}/>
