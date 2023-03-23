@@ -10,6 +10,14 @@ export function BoyNameToEnum(name:string):Name
     const typedName = name as keyof typeof Name;
     return Name[typedName];
 }
+export function EnumToStringArrayWithoutEntries(anEnum:any, elements:any[]) {
+
+    return Object.keys(anEnum)
+        .filter( value => !elements.includes(Number(value)))
+        .filter(value => !isNaN(Number(value)))
+        .map(key => anEnum[key]);
+}
+
 export function EnumToStringArrayWithout(anEnum:any, element:any) {
 
     return Object.keys(anEnum)

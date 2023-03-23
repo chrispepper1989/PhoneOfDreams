@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import './App.css';
-import {Game} from "./game";
+import {EnumToStringArray, Game} from "./game";
 
 import {PhoneClue, PhoneGrid} from "./PhoneGrid";
 import {Helmet} from "react-helmet";
@@ -9,15 +9,27 @@ import {Name} from "./boyNames";
 
 function App() {
     const seedKey = "seedkey";
+    const boysRangKey = "boysRangKey"
   
     const [seed,setSeed]= useState<string>("123456");
     const [gameStarted, setGameStarted] = useState<boolean>(false);
     const [showSureModal, setShowSureModal] = useState<boolean>(false);
     const [showSetModal, setShowSetModal] = useState<boolean>(false);
+    const [boysRang, setBoysRang] = useState<Name[]>([]);
     const [input, setInput] = useState('');
-    let game:Game = new Game(seed);
-
-
+    let game:Game = new Game(seed);    
+    
+    
+    function updateBoysRang(boy:Name)
+    {
+        if(!boy)
+            return;
+        boysRang.push(boy);
+        setBoysRang(boysRang);
+        localStorage.setItem(boysRangKey, JSON.stringify(boysRang));
+    }
+        
+    
     useEffect(() => {
         function alertUser(ev:any) {
             ev.preventDefault();
@@ -30,13 +42,17 @@ function App() {
             window.removeEventListener('beforeunload', alertUser)            
         }
     })
-    function setGame(seed:string)
-    {
+    function setGame(seed: string, boysRangBefore?: Name[]) {
         setGameStarted(true);
         localStorage.setItem(seedKey, seed);
         setSeed(seed);
         setInput(seed);
         game = new Game(seed);
+        if(boysRangBefore)
+        {
+            boysRangBefore.forEach( (boy) => game.getClueFromBoy(boy));
+        }
+            
     }
     function newGame()
     {
@@ -56,7 +72,10 @@ function App() {
         let loadSeed = localStorage.getItem(seedKey) ;
         console.log("load seed is " + loadSeed)
         if(loadSeed) {
-            setGame(loadSeed);
+            const boysRangBefore:Name[] = JSON.parse(localStorage.getItem(boysRangKey) || '[]') as Name[];
+            console.log(boysRangBefore);
+            setBoysRang(boysRangBefore);
+            setGame(loadSeed,boysRangBefore);
         }
         else 
             newGame();
@@ -83,11 +102,21 @@ function App() {
         return clue;
        
     }        
+    function getBoysAndClues() : string[]
+    {
+        let state = new Game(seed);
+       
+        let clues =  boysRang.map( (boy) => `${Name[boy]} said ${state.getClueFromBoy(boy)}`);
+        console.log(boysRang);
+        console.log(clues);
+        return  clues;
+    }
 
     function handlePhoneCall(number:string):PhoneClue {
         if(!gameStarted) return {message:"Bad Game State"};
         
         const boy = game.phone(number);
+        updateBoysRang(boy);
         if(boy) {
             const clue = newClue(boy);
             const boyName = Name[boy]            
@@ -128,7 +157,7 @@ function App() {
                 
                 <div className="flex flex-space-between">
                  <input value={input} onInput={e => setInput(e.currentTarget.value)}/>
-           
+                    
                 <br/>
                 <button className="cta" onClick={() => {setShowSetModal(false); setGame(input)} }>Set Seed</button>
                 </div>
@@ -142,6 +171,12 @@ function App() {
                 <br/>
                 <button className="cta" onClick={() => {setShowSureModal(false); newGame()} }>Yes: New Game</button>
                     </div>
+                 <div>
+                     <h2>Boys and clues so far</h2>
+                     <ol>
+                         {getBoysAndClues().map( (value, key) =>  <li key={key}>{value}</li>)}
+                     </ol>
+                 </div>
             </dialog> :
 
                 <div className="App">

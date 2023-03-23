@@ -1,4 +1,4 @@
-﻿import {EnumToStringArray, EnumToStringArrayWithout, Game} from "./game";
+﻿import {EnumToStringArray, EnumToStringArrayWithout, EnumToStringArrayWithoutEntries, Game} from "./game";
 import {BoardLocation, Clothes, ClueTypes, Food, Sport} from "./clueEnums";
 import {boys} from "./boys";
 import {Name} from "./boyNames";
@@ -20,10 +20,15 @@ describe(`enum helper functions`, () => {
     it("Enum array without", () =>{         
           expect(EnumToStringArrayWithout(test, test.Apple)).toStrictEqual(["Orange", "Pear"])
     })
+    it("Enum array without list", () =>{
+        expect(EnumToStringArrayWithoutEntries(test, [test.Apple, test.Orange])).toStrictEqual(["Pear"])
+    })
     it("Enum array ", () =>{
         expect(EnumToStringArray(test)).toStrictEqual(["Apple", "Orange", "Pear"])
-    })
+    })  
+    
 });
+
 
 describe('Game gives right clues for specific boy: Adam ', () => {
     const game = new Game("123");
