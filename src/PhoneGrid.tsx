@@ -36,11 +36,13 @@ export const PhoneGrid: React.FC<PhoneProps> = (phoneProps) => {
     const [input, setInput] = useState("");
     const [guess, setGuess] = useState("none");
     const [isHowToPlay, setIsHowToPlay] = useState(true);
+    const [inFullScreen, setInFullScreen] = useState(document.fullscreenElement);
     const [display, setDisplay] = useState(phoneProps.display ?? "555-");
     const names = EnumToNumberArray(Name);
     const [nameSelected, setNameSelected] = useState<string>(FakeBoy);
     const [speakerOn, setSpeakerOn] = React.useState(true);
     const [lastClue, setLastClue] = React.useState<PhoneClue | undefined>(undefined);
+    //let inFullScreen = document.fullscreenElement;
     
     function getVoices() {
         let voices = speechSynthesis.getVoices();
@@ -53,6 +55,7 @@ export const PhoneGrid: React.FC<PhoneProps> = (phoneProps) => {
     }
     useEffect( () =>
     {
+        setInFullScreen(document.fullscreenElement);
         document.body.requestFullscreen();
     },[display])
     
@@ -188,7 +191,7 @@ export const PhoneGrid: React.FC<PhoneProps> = (phoneProps) => {
         setIsPhoneNumber(false)
         setIsGuessing(false)
     }
-
+    
     return (
 
             <div className="container">
@@ -206,7 +209,7 @@ export const PhoneGrid: React.FC<PhoneProps> = (phoneProps) => {
                             <div className="info">
                                 <a href='https://github.com/chrispepper1989/PhoneOfDreams#readme'> How To Play </a>                               
                                 <button onClick={() => phoneProps.showModal()} > Click for Game Menu</button>
-                                <button onClick={()=>{ document.fullscreenElement ? document.exitFullscreen() : document.body.requestFullscreen();}}>Toggle Full Screen</button>
+                                <button onClick={()=>{ document.fullscreenElement ? document.exitFullscreen() : document.body.requestFullscreen(); setInFullScreen(document.fullscreenElement )}}>{!inFullScreen ? "Exit" : "Enter"} Full Screen</button>
                                 <button onClick={()=>{setIsHowToPlay(false);}}>Close Info</button>
                             </div></>: null}
                         {isPhoneNumber || isGuessing?
