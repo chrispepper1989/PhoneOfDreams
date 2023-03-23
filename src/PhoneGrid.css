@@ -90,11 +90,7 @@ div {
     text-align: center;
 }
 
-div:after {
-    content: "";
-    display: inline-block;
-    width: 100%;
-}
+
 
 .Screen { grid-area: Screen; }
 
