@@ -53,7 +53,7 @@ export const PhoneGrid: React.FC<PhoneProps> = (phoneProps) => {
     }
     useEffect( () =>
     {
-        
+        document.body.requestFullscreen();
     },[display])
     
     function handleCallButton(number: string) {
