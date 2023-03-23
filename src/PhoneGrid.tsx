@@ -35,7 +35,7 @@ export const PhoneGrid: React.FC<PhoneProps> = (phoneProps) => {
     const [isGuessing, setIsGuessing] = useState(false);
     const [input, setInput] = useState("");
     const [guess, setGuess] = useState("none");
-    const [isHowToPlay, setIsHowToPlay] = useState(true);
+    const [isHowToPlay, setIsHowToPlay] = useState(false);
     const [inFullScreen, setInFullScreen] = useState(false);
     const [display, setDisplay] = useState(phoneProps.display ?? "555-");
     const names = EnumToNumberArray(Name);
@@ -55,7 +55,14 @@ export const PhoneGrid: React.FC<PhoneProps> = (phoneProps) => {
     }
     useEffect( () =>
     {
+        setIsHowToPlay(false);
+        handleInfoButton();
         setInFullScreen(false);
+    },[])
+    useEffect( () =>
+    {
+       
+        
       //  document.body.requestFullscreen();
     },[display])
     
@@ -209,7 +216,7 @@ export const PhoneGrid: React.FC<PhoneProps> = (phoneProps) => {
                             <div className="info">
                                 <a href='https://github.com/chrispepper1989/PhoneOfDreams#readme'> How To Play </a>                               
                                 <button onClick={() => phoneProps.showModal()} > Click for Game Menu</button>
-                                <button onClick={()=>{ document.fullscreenElement ? document.exitFullscreen() : document.body.requestFullscreen(); setInFullScreen(!!document.fullscreenElement)}}>{!inFullScreen ? "Exit" : "Enter"} Full Screen</button>
+                                <button onClick={()=>{ document.fullscreenElement ? document.exitFullscreen() : document.body.requestFullscreen(); setInFullScreen(!inFullScreen)}}>{inFullScreen ? "Exit" : "Enter"} Full Screen</button>
                                 <button onClick={()=>{setIsHowToPlay(false);}}>Close Info</button>
                             </div></>: null}
                         {isPhoneNumber || isGuessing?
