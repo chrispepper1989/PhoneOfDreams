@@ -22,7 +22,7 @@ export function EnumToStringArrayWithout(anEnum:any, element:any) {
 
     return Object.keys(anEnum)
         .filter(value => !isNaN(Number(value)))
-        .filter( value => value != element)
+        .filter( value => value !== element)
         .map(key => anEnum[key]);
 }
 export function EnumToStringArray(anEnum:any) {
@@ -53,15 +53,9 @@ export class Game {
     }
     private _crushBoy: TBoy;
     private _crushBoyName: Name;
-
-    clueIndexes: Record<ClueTypes, number> =
-        {
-            [ClueTypes.BoardLocation]: 0,
-            [ClueTypes.Sport]: 0,
-            [ClueTypes.Food]: 0,
-            [ClueTypes.Clothes]: 0
-        };
     private rand: Rand;
+    clueIndexes: Record<ClueTypes, number>;
+    
     private RandInt(max:number):number
     {
         return Math.floor(this.rand.next() * max);
@@ -74,8 +68,21 @@ export class Game {
         this._crushBoyName = chosenBoyIndex;
         this.setBoy(chosenBoyIndex);
 
-    }
+        this.clueIndexes =
+            {
+                [ClueTypes.BoardLocation]:this.getRandomEnumIndex(BoardLocation),
+                [ClueTypes.Sport]: this.getRandomEnumIndex(Sport),
+                [ClueTypes.Food]:  this.getRandomEnumIndex(Food),
+                [ClueTypes.Clothes]: this.getRandomEnumIndex(Clothes),
+            };
 
+    }
+    
+    getRandomEnumIndex(theEnum: any)
+    {
+        return this.RandInt(EnumToStringArray(theEnum).length-1);
+    }
+    
     getEnumClue(theEnum: any, clueType:ClueTypes, boyValue:any|undefined):string
     {
         const index = this.clueIndexes[clueType];
