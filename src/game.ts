@@ -3,6 +3,7 @@ import {phoneNumbers} from "./phoneNumbers";
 import {BoardLocation, Clothes, ClueTypes, Food, Sport} from "./clueEnums";
 import {boys, type TBoy} from "./boys";
 import {Name} from "./boyNames";
+import {PhoneClue} from "./PhoneGrid";
 
 
 export function BoyNameToEnum(name:string):Name
@@ -38,10 +39,24 @@ export function EnumToNumberArray(anEnum:any):number[] {
 
 }
 
-
+export interface PhoneClue
+{
+    nameOfBoy?: string,
+    message: string,
+}
 const numberOfBoys = Object.keys(boys).length;
 
 export class Game {
+    get Seed(): string {
+        return this._currentSeed;
+    }
+
+  
+    private readonly _currentSeed: string;
+    get boysRang(): Name[] {
+        return this._boysRang;
+    }
+    
 
     setBoy(value: Name) {
         this._crushBoy = boys[value];
@@ -55,6 +70,8 @@ export class Game {
     private _crushBoyName: Name;
     private rand: Rand;
     clueIndexes: Record<ClueTypes, number>;
+    private _boysRang:Name[];
+    public onBoysRang?: () => void ;
     
     private RandInt(max:number):number
     {
@@ -63,11 +80,12 @@ export class Game {
     constructor(seed:string)
     {
         this.rand = new Rand(seed);
-        const chosenBoyIndex = this.RandInt(numberOfBoys) as Name;
+        const chosenBoyIndex = this.RandInt(numberOfBoys) as Name
+        this._currentSeed = seed;
         this._crushBoy = boys[chosenBoyIndex];
         this._crushBoyName = chosenBoyIndex;
         this.setBoy(chosenBoyIndex);
-
+        this._boysRang = [];
         this.clueIndexes =
             {
                 [ClueTypes.BoardLocation]:this.getRandomEnumIndex(BoardLocation),
@@ -77,7 +95,16 @@ export class Game {
             };
 
     }
-    
+
+    replayState(boysRangBefore?: Name[] ) {
+        
+        if(boysRangBefore)
+        {
+            //replay game state
+            this._boysRang = boysRangBefore;
+            this._boysRang.forEach( (boy) => this.getClueFromBoy(boy));
+        }
+    }
     getRandomEnumIndex(theEnum: any)
     {
         return this.RandInt(EnumToStringArray(theEnum).length-1);
@@ -181,14 +208,28 @@ export class Game {
 
         return "Sorry not saying anything";
     }
-
+    
     phone(expectedNumber: string):Name {
         return phoneNumbers[expectedNumber];
     }
-    phoneClue(expectedNumber: string)
-    {
-        return this.getClueFromBoy(this.phone(expectedNumber));
+    
+    phoneANumberForAClue(number:string):PhoneClue {
+        
+        const boy = this.phone(number);
+        //updateBoysRang(boy);
+        
+        if(boy) {
+            if (this.onBoysRang) {
+                this.onBoysRang()
+            }
+            this._boysRang.push(boy);
+            const clue = this.getClueFromBoy(boy);
+            const boyName = Name[boy]
+            return {message:clue, nameOfBoy:boyName};
+        }
+        return {message:"Sorry wrong number"};
     }
+  
     getPhoneNumber(boy:Name) : string
     {
         return (Object.keys(phoneNumbers)).find(key => phoneNumbers[key] === boy) ??"";

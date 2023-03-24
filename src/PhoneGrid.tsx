@@ -1,6 +1,6 @@
 ﻿import React, {useEffect, useState} from "react";
 import './PhoneGrid.css';
-import {BoyNameToEnum, EnumToNumberArray} from "./game";
+import {BoyNameToEnum, EnumToNumberArray, PhoneClue} from "./game";
 import useSound from 'use-sound'
 
 
@@ -11,11 +11,7 @@ import buttonSound from './button-click.mp3'
 import message from './message.mp3'
 import {Name} from "./boyNames";
 
-export interface PhoneClue
-{
-    nameOfBoy?: string,
-    message: string,
-}
+
 export interface PhoneProps {
     onCall: (number:string)=>PhoneClue
     onGuess: (name:string)=>boolean

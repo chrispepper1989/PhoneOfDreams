@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import './App.css';
-import { Game} from "./game";
+import {Game} from "./game";
 
-import {PhoneClue, PhoneGrid} from "./PhoneGrid";
-import {Helmet} from "react-helmet";
+import {PhoneGrid} from "./PhoneGrid";
 import {Name} from "./boyNames";
-
+import {Header} from "./Header";
+import {GameMenuDialogue} from "./GameMenuDialogue";
 
 function App() {
     const seedKey = "seedkey";
@@ -13,55 +13,25 @@ function App() {
   
     const [seed,setSeed]= useState<string>("123456");
     const [gameStarted, setGameStarted] = useState<boolean>(false);
-    const [showSureModal, setShowSureModal] = useState<boolean>(false);
-    const [showDebug, setShowDebug] = useState<boolean>(false);
-    const [showLog, setShowLog] = useState<boolean>(false);
-    const [showAnswer, setShowAnswer] = useState<boolean>(false);
-    const [boysRang, setBoysRang] = useState<Name[]>([]);
-    const [input, setInput] = useState('');
-   // const [game, setGameState] = useState(new Game(seed));
-    let game:Game = new Game(seed);
-    replayState(game, boysRang)   
+    const [showDialogue, setShowDialogue] = useState<boolean>(false);
     
-    function updateBoysRang(boy:Name)
-    {
-        if(!boy)
-            return;
-        boysRang.push(boy);
-        setBoysRang(boysRang);
-        localStorage.setItem(boysRangKey, JSON.stringify(boysRang));
-    }
-        
-    
-    useEffect(() => {
-        function alertUser(ev:any) {
-            ev.preventDefault();
-            return ev.returnValue = 'Are you sure you want to close?';
-        }
 
-        window.addEventListener('beforeunload', alertUser)        
-       
-        return () => {
-            window.removeEventListener('beforeunload', alertUser)            
-        }
-    })
-    function replayState(gameState:Game, boysRangBefore?: Name[] ) {
-        if(boysRangBefore)
-        {
-            //replay game state
-            boysRangBefore.forEach( (boy) => game.getClueFromBoy(boy));
-        }
-    }
+    let game:Game = new Game(seed);
+    game.replayState(boysRang)   
+    game.onBoysRang = () => {localStorage.setItem(boysRangKey, JSON.stringify(game.boysRang));};
+            
+    
+    
+   
     function restartGame(seed: string, boysRangBefore?: Name[]) {
         setGameStarted(true);
-        //setGameState(new Game(seed))
+       
         localStorage.setItem(seedKey, seed);
         setSeed(seed);
         setInput(seed);
-        replayState(game,boysRangBefore);
+        game.replayState(boysRangBefore);     
         
-        setBoysRang(boysRangBefore ?? []);
-        localStorage.setItem(boysRangKey, JSON.stringify(boysRang));
+        localStorage.setItem(boysRangKey, JSON.stringify(boysRangBefore ?? []));
             
     }
     function newGame()
@@ -82,10 +52,9 @@ function App() {
         console.log("load seed is " + loadSeed)
         if(loadSeed) {
             const boysRangBefore:Name[] = JSON.parse(localStorage.getItem(boysRangKey) || '[]') as Name[];
-            console.log(boysRangBefore);
-            setBoysRang(boysRangBefore);
+            
             restartGame(loadSeed,boysRangBefore);
-            setShowSureModal(true);
+            setShowDialogue(true);
         }
         else 
             newGame();
@@ -96,111 +65,19 @@ function App() {
         loadGame(); 
     },[]);
     
-    const display = "Phone Of Dreams";
-
-    function getAnswer(): string
-    {
-        return game.getAnswer();
-    }
     
-    function newClue(nameCalled: Name ):string {      
-        
-        if(!gameStarted) return "Bad Game State";
-        
-        const clue= game.getClueFromBoy(nameCalled);
-        console.log("Clue From:")
-        console.log(Name[nameCalled]);
-        console.log(clue);
-      
-        return clue;
-       
-    }        
-    function getBoysAndClues() : string[]
-    {
-        let state = new Game(seed);
-       
-        let clues =  boysRang.map( (boy) => `${Name[boy]} said ${state.getClueFromBoy(boy)}`);
-        console.log(boysRang);
-        console.log(clues);
-        return  clues;
-    }
 
-    function handlePhoneCall(number:string):PhoneClue {
-        if(!gameStarted) return {message:"Bad Game State"};
-        
-        const boy = game.phone(number);
-        updateBoysRang(boy);
-        if(boy) {
-            const clue = newClue(boy);
-            const boyName = Name[boy]            
-            return {message:clue, nameOfBoy:boyName};
-        }
-        return {message:"Sorry wrong number"};
-    }
-
-    let kofiSettings = "  " +
-        " kofiWidgetOverlay.draw('chrispepper1989', {\n" +
-        "    'type': 'floating-chat',\n" +
-        "    'floating-chat.donateButton.text': 'Support me',\n" +
-        "    'floating-chat.donateButton.background-color': '#ffffff',\n" +
-        "    'floating-chat.donateButton.text-color': '#323842'\n" +
-        "  });\n";
-
-    if(!gameStarted){return <div>Loading...</div>}
-
-    
+    if(!gameStarted){return <div>Loading...</div>}   
 
     return (
         <>
-        <head>
-
-            Click Sound Effect by <a href="https://pixabay.com/users/irinairinafomicheva-25140203/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=music&amp;utm_content=13693">irinairinafomicheva</a> from <a href="https://pixabay.com/sound-effects//?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=music&amp;utm_content=13693">Pixabay</a>
-            Notification Sound Effect by <a href="https://pixabay.com/users/sergequadrado-24990007/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=music&amp;utm_content=21464">SergeQuadrado</a> from <a href="https://pixabay.com/sound-effects//?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=music&amp;utm_content=21464">Pixabay</a>
-
-            <Helmet>
-            <script src='https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'/>
-            <script >{kofiSettings}</script>
- 
-        </Helmet>
-
-        </head>
+        <Header preventRefreshOrClose={true} ></Header>
             { 
-             showSureModal ? <dialog open className='app add-dialog'>
-                <h2>Phone Of Dreams</h2>
-                <p>Your loaded game is {seed}</p>
-                    <div className="flex flex-space-between">
-                <button className="cta" onClick={() => {setShowSureModal(false); setShowLog(false)}}>Resume</button>
-                <br/>
-                
-                <button  onClick={() => {setShowSureModal(false); setShowLog(false); newGame()} }>New Game</button>
-                        <br/>
-                        <button  onClick={() => setShowDebug(!showDebug)}>{!showDebug ? "Show" : "Hide"} Advanced</button>
-                        {showDebug? (<div>
-                <h3>Set Load Code Here:</h3>
-
-                <div className="flex flex-space-between">
-                    <input value={input} onInput={e => setInput(e.currentTarget.value)}/>
-
-                    <br/>
-                    <button  onClick={() => {restartGame(input)} }>Set Seed</button>
-                </div>
-                
-                 <h3>Boys and clues so far:</h3>                   
-                    
-                     {showLog ? <><ol> {getBoysAndClues().map( (value, key) =>  
-                         <li key={key}>{value}</li>)}</ol>
-                             <button className="cta" onClick={() => setShowAnswer(!showAnswer)}>{!showAnswer ? "Show" : "Hide"} Answer</button>
-                         </>
-                         : <button  onClick={() => setShowLog(true)}>Show Log</button>}
-                        {showLog && showAnswer ? <p>{getAnswer()}</p> : null} </div>) : null}
-
-                      
-                </div>
-                    
-            </dialog> :
+             showDialogue ? <GameMenuDialogue game={game} 
+                                              onCloseDialogue={ ()=>setShowDialogue(false)}/>:
 
                 <div className="App">
-                    <PhoneGrid  showModal={ () =>  setShowSureModal(true)}  onCall={handlePhoneCall} display={display} getPhoneNumber={game.getPhoneNumber} onGuess={(name) => game.guessFromName(name)}></PhoneGrid>
+                    <PhoneGrid  showModal={ () =>  setShowDialogue(true)}  onCall={(number) => game.phoneANumberForAClue(number)} getPhoneNumber={game.getPhoneNumber} onGuess={(name) => game.guessFromName(name)}></PhoneGrid>
                     
                 </div>
                }
