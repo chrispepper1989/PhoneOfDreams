@@ -5,6 +5,30 @@ interface HeaderProps
 {
     preventRefreshOrClose:boolean
 }
+
+export function checkLocalStorageEnabled()
+{
+    // debug return false;
+    if (typeof localStorage !== 'undefined') {
+        try {
+            localStorage.setItem('feature_test', 'yes');
+            if (localStorage.getItem('feature_test') === 'yes') {
+                localStorage.removeItem('feature_test');
+                return true;
+            } else {
+                // localStorage is disabled
+                return false;
+            }
+        } catch(e) {
+            // localStorage is disabled
+            return false;
+        }
+    } else {
+        // localStorage is not available
+        return false;
+    }
+}
+
 export const Header: React.FC<HeaderProps> = ({preventRefreshOrClose}) => {
     let kofiSettings = "  " +
         " kofiWidgetOverlay.draw('chrispepper1989', {\n" +
@@ -14,7 +38,9 @@ export const Header: React.FC<HeaderProps> = ({preventRefreshOrClose}) => {
         "    'floating-chat.donateButton.text-color': '#323842'\n" +
         "  });\n";
 
-    // prevent window close
+    
+    
+    
     
     useEffect(() => {
 

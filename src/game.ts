@@ -44,7 +44,13 @@ export interface PhoneClue
     message: string,
 }
 const numberOfBoys = Object.keys(boys).length;
-
+export function newGameSeed():string{
+    const maxNumber =   9999;
+    const maxPadding = "0000";
+    const number = (Math.floor(Math.random()*maxNumber)).toString()
+    const newSeed =  maxPadding.substring(number.length) + number;
+    return newSeed;
+}
 export class Game {
     get Seed(): string {
         return this._currentSeed;
@@ -78,11 +84,8 @@ export class Game {
     }
     getNewSeed():string
     {
-        const maxNumber =   9999;
-        const maxPadding = "0000";
-        const number = (Math.floor(Math.random()*maxNumber)).toString()
-        const newSeed =  maxPadding.substring(number.length) + number;
-        return newSeed;
+        return newGameSeed();
+        
     }
     constructor(seed?:string)
     {

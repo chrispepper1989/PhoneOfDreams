@@ -2,6 +2,7 @@
 import {Name} from "./boyNames";
 import {Game} from "./game";
 import {PhoneProps} from "./PhoneGrid";
+import {checkLocalStorageEnabled} from "./Header";
 
 interface GameDialogueProps
 {
@@ -22,7 +23,8 @@ export const GameMenuDialogue: React.FC<GameDialogueProps> = ({currentSeed,curre
     function getAnswer(): string {
         return new Game(knownSeed).getAnswer();
     }
-
+  
+    
     function getBoysAndCluesFromState(gameSeed: string, boysCalled: Name[]): string[] {
         let state = new Game(gameSeed);
         return boysCalled.map((boy) => `${Name[boy]} said ${state.getClueFromBoy(boy)}`);
@@ -31,8 +33,11 @@ export const GameMenuDialogue: React.FC<GameDialogueProps> = ({currentSeed,curre
     return <div>
         <div id="block-behind-overlay" className="overlay"></div>
         <dialog id="actual-dialogue" open className='app add-dialog'>
-        <h2>Phone Of Dreams</h2>
-        <p>Your loaded game is {knownSeed}</p>
+        <h2 >Phone Of Dreams</h2>
+            {!checkLocalStorageEnabled() ? <div className="warning"><p className="warning">local storage is disabled. certain features of this game may not function correctly</p>
+
+            </div> : null}
+           <p>Your loaded game is {knownSeed}</p>
         <div className="flex flex-space-between">
             <button className="cta" onClick={() => {
                 
@@ -41,6 +46,7 @@ export const GameMenuDialogue: React.FC<GameDialogueProps> = ({currentSeed,curre
             }}>Resume
             </button>
             <br/>
+            
 
             <button onClick={() => {                
                 onCloseDialogue();
@@ -49,6 +55,7 @@ export const GameMenuDialogue: React.FC<GameDialogueProps> = ({currentSeed,curre
             }}>New Game
             </button>
             <br/>
+
             <button onClick={() => setShowDebug(!showDebug)}>{!showDebug ? "Show" : "Hide"} Advanced</button>
             {showDebug ? (<div>
                 <h3>Set Load Code Here:</h3>
