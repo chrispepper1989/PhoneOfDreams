@@ -3,7 +3,6 @@ import {phoneNumbers} from "./phoneNumbers";
 import {BoardLocation, Clothes, ClueTypes, Food, Sport} from "./clueEnums";
 import {boys, type TBoy} from "./boys";
 import {Name} from "./boyNames";
-import {PhoneClue} from "./PhoneGrid";
 
 
 export function BoyNameToEnum(name:string):Name
@@ -77,11 +76,25 @@ export class Game {
     {
         return Math.floor(this.rand.next() * max);
     }
-    constructor(seed:string)
+    getNewSeed():string
     {
-        this.rand = new Rand(seed);
+        const maxNumber =   9999;
+        const maxPadding = "0000";
+        const number = (Math.floor(Math.random()*maxNumber)).toString()
+        const newSeed =  maxPadding.substring(number.length) + number;
+        return newSeed;
+    }
+    constructor(seed?:string)
+    {
+        if(seed && seed.length > 3) {
+            this._currentSeed = seed;
+        }
+        else {
+            this._currentSeed = this.getNewSeed();
+        }        
+        this.rand = new Rand(this._currentSeed);
         const chosenBoyIndex = this.RandInt(numberOfBoys) as Name
-        this._currentSeed = seed;
+        
         this._crushBoy = boys[chosenBoyIndex];
         this._crushBoyName = chosenBoyIndex;
         this.setBoy(chosenBoyIndex);
