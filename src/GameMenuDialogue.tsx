@@ -21,12 +21,12 @@ export const GameMenuDialogue: React.FC<GameDialogueProps> = ({currentSeed,curre
     const [knownSeed, setKnownSeed] = useState(currentSeed);
     const [knownBoysRang, setBoysRang] = useState(currentBoysRang);
     function getAnswer(): string {
-        return new Game(knownSeed).getAnswer();
+        return new Game({seed:knownSeed}).getAnswer();
     }
   
     
     function getBoysAndCluesFromState(gameSeed: string, boysCalled: Name[]): string[] {
-        let state = new Game(gameSeed);
+        let state = new Game({seed:knownSeed});
         return boysCalled.map((boy) => `${Name[boy]} said ${state.getClueFromBoy(boy)}`);
     }
 

@@ -51,6 +51,11 @@ export function newGameSeed():string{
     const newSeed =  maxPadding.substring(number.length) + number;
     return newSeed;
 }
+type GameState = 
+{
+    seed: string;
+    boysCalled?: Name[];
+}
 export class Game {
     get Seed(): string {
         return this._currentSeed;
@@ -87,17 +92,27 @@ export class Game {
         return newGameSeed();
         
     }
-    constructor(seed?:string)
+    
+    getSaveState() : GameState
     {
+        return {
+            boysCalled: this._boysRang, seed: this._currentSeed
+        }
+    }
+   
+    constructor(saveState?: GameState)
+    {
+        const seed = saveState?.seed;
         if(seed && seed.length > 3) {
             this._currentSeed = seed;
         }
         else {
             this._currentSeed = this.getNewSeed();
-        }        
+        }
+                
         this.rand = new Rand(this._currentSeed);
         const chosenBoyIndex = this.RandInt(numberOfBoys) as Name
-        
+
         this._crushBoy = boys[chosenBoyIndex];
         this._crushBoyName = chosenBoyIndex;
         this.setBoy(chosenBoyIndex);
@@ -109,6 +124,9 @@ export class Game {
                 [ClueTypes.Food]:  this.getRandomEnumIndex(Food),
                 [ClueTypes.Clothes]: this.getRandomEnumIndex(Clothes),
             };
+        
+        if(saveState)
+            this.replayState(saveState.boysCalled)
 
     }
 

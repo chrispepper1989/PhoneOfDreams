@@ -16,10 +16,10 @@ function App() {
     const [seed, setSeed] = useState<string>(loadSeed ?? backUpSeed);
     const [showDialogue, setShowDialogue] = useState<boolean>(!!loadSeed);
     const game:Game = startGame(seed ?? undefined);
-   
+    
     function startGame(withSeed?: string):Game {
         
-        let aGame = new Game(withSeed);
+        let aGame = new Game(withSeed ? {seed: withSeed} : undefined);
         if(withSeed && withSeed != seed) {            
             setSeed(withSeed);
         }
@@ -36,8 +36,8 @@ function App() {
         }
         else
         {            
-            console.log("local storage is disabled");
-            aGame = new Game(seed);
+            console.log("local storage is disabled");            
+            aGame = new Game({seed: seed} );
         }
         console.log("Playing Seed: " + aGame.Seed)
         return aGame;

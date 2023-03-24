@@ -31,7 +31,7 @@ describe(`enum helper functions`, () => {
 
 
 describe('Game gives right clues for specific boy: Adam ', () => {
-    const game = new Game("123");
+    const game = new Game({seed:"123"});
     const expectedBoy = Name.Adam
     game.setBoy(expectedBoy)
     
@@ -122,7 +122,7 @@ describe('Game gives right clues for specific boy: Adam ', () => {
 
 describe('Game has Clues ', () =>
 {
-    const game = new Game("123");
+    const game = new Game({seed:"123"});
     it('has a defined boy', () =>
     {
         expect(game.crushBoy).toBeDefined()
