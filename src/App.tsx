@@ -19,8 +19,10 @@ function App() {
     const [showAnswer, setShowAnswer] = useState<boolean>(false);
     const [boysRang, setBoysRang] = useState<Name[]>([]);
     const [input, setInput] = useState('');
-    const [game, setGameState] = useState(new Game(seed));
-
+   // const [game, setGameState] = useState(new Game(seed));
+    let game:Game = new Game(seed);
+    replayState(game, boysRang)   
+    
     function updateBoysRang(boy:Name)
     {
         if(!boy)
@@ -43,18 +45,21 @@ function App() {
             window.removeEventListener('beforeunload', alertUser)            
         }
     })
-    function restartGame(seed: string, boysRangBefore?: Name[]) {
-        setGameStarted(true);
-        setGameState(new Game(seed))
-        localStorage.setItem(seedKey, seed);
-        setSeed(seed);
-        setInput(seed);
-      
+    function replayState(gameState:Game, boysRangBefore?: Name[] ) {
         if(boysRangBefore)
         {
             //replay game state
             boysRangBefore.forEach( (boy) => game.getClueFromBoy(boy));
         }
+    }
+    function restartGame(seed: string, boysRangBefore?: Name[]) {
+        setGameStarted(true);
+        //setGameState(new Game(seed))
+        localStorage.setItem(seedKey, seed);
+        setSeed(seed);
+        setInput(seed);
+        replayState(game,boysRangBefore);
+        
         setBoysRang(boysRangBefore ?? []);
         localStorage.setItem(boysRangKey, JSON.stringify(boysRang));
             
