@@ -17,6 +17,7 @@ function App() {
     const [showDialogue, setShowDialogue] = useState<boolean>(!!loadSeed);
     const game:Game = startGame(seed ?? undefined);
     
+    // todo move to load and start states
     function startGame(withSeed?: string):Game {
         
         let aGame = new Game(withSeed ? {seed: withSeed} : undefined);
