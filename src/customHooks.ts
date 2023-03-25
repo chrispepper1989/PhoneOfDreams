@@ -2,7 +2,7 @@
 import {useState} from "react";
 import {checkLocalStorageEnabled} from "./Header";
 
-export function useLocalStorageState<T>(seedKey:string, defaultValue?:T): [value:T | undefined, setValue:(state:T)=>void] {
+export function useLocalStorageState<T>(seedKey:string, defaultValue?:T): [value:T | undefined, setValue:(state:T, force?:boolean)=>void] {
 
     let loadedState = defaultValue;
     if (checkLocalStorageEnabled()) {
@@ -12,15 +12,16 @@ export function useLocalStorageState<T>(seedKey:string, defaultValue?:T): [value
   
     const [value, setValue] = useState(loadedState);
     const trueValue = loadedState ?? value;
-    function handleChange(newValue:T) {
+    function handleChange(newValue:T, stopStateChange?:boolean) {
        
         if(!newValue)return;
+        stopStateChange = stopStateChange ?? false;
         
         if (checkLocalStorageEnabled()) {
             localStorage.setItem(seedKey, JSON.stringify(newValue));
         }
         
-        if (newValue != value)
+        if (!stopStateChange && newValue != value)
             setValue(newValue);
         
     }
