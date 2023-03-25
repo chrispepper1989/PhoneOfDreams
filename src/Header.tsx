@@ -8,7 +8,7 @@ interface HeaderProps
 
 export function checkLocalStorageEnabled()
 {
-    // debug return false;
+    // return false;
     if (typeof localStorage !== 'undefined') {
         try {
             localStorage.setItem('feature_test', 'yes');

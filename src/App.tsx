@@ -1,64 +1,53 @@
-import React, {useEffect, useState} from 'react';
+import React, { useState} from 'react';
 import './App.css';
-import {Game, newGameSeed} from "./game";
+import {Game, GameState, newGameSeed} from "./game";
 
 import {PhoneGrid} from "./PhoneGrid";
-import {Name} from "./boyNames";
-import {checkLocalStorageEnabled, Header} from "./Header";
+import { Header} from "./Header";
 import {GameMenuDialogue} from "./GameMenuDialogue";
-const backUpSeed = new Game().Seed;
+import useLocalStorageState from "./customHooks";
 
-function App() {   
-     
-    const seedKey = "seedkey";
-    const boysRangKey = "boysRangKey"
-    let loadSeed = localStorage?.getItem(seedKey);        
-    const [seed, setSeed] = useState<string>(loadSeed ?? backUpSeed);
-    const [showDialogue, setShowDialogue] = useState<boolean>(!!loadSeed);
-    const game:Game = startGame(seed ?? undefined);
+function App() {       
     
-    // todo move to load and start states
-    function startGame(withSeed?: string):Game {
-        
-        let aGame = new Game(withSeed ? {seed: withSeed} : undefined);
-        if(withSeed && withSeed != seed) {            
-            setSeed(withSeed);
-        }
-
-        if (checkLocalStorageEnabled()) {
-            // ensure state will be stored            
-            aGame.onBoysRang = () => {
-                localStorage.setItem(boysRangKey, JSON.stringify(aGame.boysRang));
-            };
-            localStorage.setItem(seedKey, aGame.Seed);
-            // restore existing state            
-            const boysRangBefore: Name[] = JSON.parse(localStorage.getItem(boysRangKey) || '[]') as Name[];        
-            aGame.replayState(boysRangBefore);
-        }
-        else
-        {            
-            console.log("local storage is disabled");            
-            aGame = new Game({seed: seed} );
-        }
-        console.log("Playing Seed: " + aGame.Seed)
-        return aGame;
+    const gameStateKey = "gameState";
+    const [state, setState] = useLocalStorageState<GameState>(gameStateKey, {seed:newGameSeed()});
+    const gamePlayedBefore = !!(state?.seed);
+    const [showDialogue, setShowDialogue] = useState<boolean>(gamePlayedBefore);
+       
+    // create game
+    // note react creates this every time the state changes
+    // which now includes everytime a boy is rang...
+    const game:Game = new Game(state);
+    console.log("re-render"); 
+    game.onBoysRang = () => {
+        //todo move this into where it is actually needed to re-render
+        setState(game.getSaveState());
+    };
+    
+    // load a game from a seed
+    function loadGame(withSeed: string) {
+        //this triggers a state change which triggers a re-render
+        setState({seed:withSeed});       
+    }
+    // create a new game by loading from a new seed
+    function newGame(){
+        loadGame(newGameSeed());
     }
    
     return (
         <>
-        <Header preventRefreshOrClose={true} ></Header>
-            { 
-             showDialogue ? <GameMenuDialogue currentSeed={game.Seed}
-                                              currentBoysRang={game.boysRang}
-                                              onCloseDialogue={ ()=>setShowDialogue(false)} 
-                                              onLoadGame={(seed)=> startGame(seed)} 
-                                              onStartNewGame={() => startGame(newGameSeed())}/>: null}
-
-                <div className="App">
-                    <PhoneGrid  showModal={ () =>  setShowDialogue(true)}  onCall={(number) => game.phoneANumberForAClue(number)} getPhoneNumber={game.getPhoneNumber} onGuess={(name) => game.guessFromName(name)}></PhoneGrid>
-                    
-                </div>
-               
+        <Header preventRefreshOrClose={true} />
+        {showDialogue ? <GameMenuDialogue currentSeed={game.Seed}
+                                      currentBoysRang={game.boysRang}
+                                      onCloseDialogue={ ()=>setShowDialogue(false)} 
+                                      onLoadGame={(seed)=> loadGame(seed)} 
+                                      onStartNewGame={() => newGame()}/>: null}       
+        
+        <PhoneGrid  showModal={ () =>  setShowDialogue(true)}  
+                    onCall={(number) => game.phoneANumberForAClue(number)} 
+                    getPhoneNumber={game.getPhoneNumber} 
+                    onGuess={(name) => game.guessFromName(name)}/>
+       
         </> 
     );
 }

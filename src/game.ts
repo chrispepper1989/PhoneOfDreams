@@ -51,7 +51,7 @@ export function newGameSeed():string{
     const newSeed =  maxPadding.substring(number.length) + number;
     return newSeed;
 }
-type GameState = 
+export type GameState = 
 {
     seed: string;
     boysCalled?: Name[];
